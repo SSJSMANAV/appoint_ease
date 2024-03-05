@@ -1,20 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// App.js
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Login from "./components/Login/Login";
+import SignUp from "./components/SignUp/SignUp";
+import Header from "./components/Home/Header/Header"; // Rename Header screen to AppHeader
+import Front from "./components/FrontPage/FrontPage";
+import Home from "./components/Home/Home/Home";
+import Profile from "./components/Profile/Profile";
+import Footer from "./components/Home/Footer/Footer"; // Rename Footer screen to AppFooter
+import Main from "./components/Home/Main/Main";
+import Search from "./components/Search/Search";
+import Appointments from "./components/Appointment/Appointments";
+import Inbox from "./components/Inbox/Inbox";
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Inbox">
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Header" component={Header} />
+        <Stack.Screen name="Front" component={Front} />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Footer" component={Footer} />
+        <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen name="Inbox" component={Inbox} />
+        <Stack.Screen name="Appointments" component={Appointments} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
