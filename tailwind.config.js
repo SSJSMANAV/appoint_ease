@@ -10,7 +10,13 @@ module.exports = {
     bottom: {
       62: "250px",
     },
-    extend: {},
+
+    extend: {
+      fontFamily: {
+        poppins: ["Poppins-Regular", "sans-serif"],
+        poppinssemibold: ["Poppins-Semibold", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };

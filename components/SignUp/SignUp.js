@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,8 +17,28 @@ import {
   faHouse,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigation } from "@react-navigation/native";
+import ImagePicker from "react-native-image-picker";
+import { launchImageLibrary } from "react-native-image-picker";
 
 const SignUp = () => {
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibrary({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   const navigation = useNavigation();
 
   const navigatetoLogin = () => {
@@ -44,16 +64,15 @@ const SignUp = () => {
           </TouchableOpacity>
         </View>
         {/* Main */}
-        <View className="">
-          <View className=" flex-col">
+        <View className="items-center">
+          <View className=" flex-col w-10/12">
             <Text className="pl-7 text-black font-bold text-xl">
               Create Your Account
             </Text>
           </View>
-          <View>
-            <View className="gap-y-4">
+          <View className="w-full mt-6">
+            <View className="gap-y-2">
               <View className="gap-y-2 ">
-                <View className=""></View>
                 <View className=" items-center ">
                   <TextInput
                     placeholder="Email"
@@ -114,9 +133,27 @@ const SignUp = () => {
             </View>
           </View>
         </View>
+        <View className="mt-10  ml-8">
+          <View className="w-2/5">
+            <Button
+              title="Choose File"
+              onPress={pickImage}
+              color="#999999"
+              placeholderTextColor="#000"
+            />
+
+            {image && (
+              <Image
+                source={{ uri: image }}
+                style={{ width: 200, height: 200 }}
+              />
+            )}
+          </View>
+        </View>
+
         {/* Main */}
 
-        <View className="mt-16 items-center  ">
+        <View className="mt-8 items-center  ">
           <TouchableOpacity
             className=" bg-blue-600 items-center justify-center h-12 rounded-xl  w-11/12"
             onPress={navigatetoLogin}

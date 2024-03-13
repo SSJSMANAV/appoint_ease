@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import {
   FlatList,
@@ -9,104 +9,75 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-
+import { fetchDoctorsList } from "../../actions/doctor-action";
 import Footer from "../Home/Footer/Footer";
+import { useFonts } from "expo-font";
 
 const Search = ({ navigation }) => {
-  const [selectedCategory, setSelectedCategory] = useState(1);
+  let [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Semibold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
+  });
 
-  const doctors = [
-    {
-      id: 1,
-      name: "Dr. Olivia Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 2,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 3,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 4,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 5,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 6,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 7,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 8,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 9,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-    {
-      id: 10,
-      name: "Dr. Olivion Brown",
-      specialization: "Cardiologist",
-      experience: "9 years",
-      rating: 4.5,
-      price: 96,
-      image: require("../../images/doctor.png"),
-    },
-  ];
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  const [selectedCategory, setSelectedCategory] = useState("All"); // Updated initial state
+  const [doctorData, setDoctorData] = useState([]);
+  const [doctorName, setDoctorName] = useState("");
+
+  const handleCategoryPress = (category) => {
+    setSelectedCategory(category);
+    console.log("Category" + selectedCategory);
+  };
+
+  const searchlist = (name) => {
+    console.log(name);
+    setDoctorName(name);
+  };
+
+  const handleSearchSubmit = () => {
+    console.log(doctorName);
+  };
+
+  const searchData = async () => {};
+
+  const loadData = async () => {
+    try {
+      const category = selectedCategory === "All" ? "all" : selectedCategory;
+      console.log("Category being fetched:", category); // Log the category being fetched
+      const fetchData = await fetchDoctorsList(category);
+      setDoctorData(fetchData.result);
+      console.log("Doctor data:", fetchData.result);
+    } catch (err) {
+      console.log("Error: " + err);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [selectedCategory]);
+
+  const renderDoctorCategory = ({ item }) => (
+    <View className="flex-row mr-4">
+      <TouchableOpacity
+        className="flex-row"
+        onPress={() => handleCategoryPress(item.category)}
+      >
+        <Text
+          style={{ borderWidth: 1, fontFamily: "Poppins-Regular" }}
+          className={`text-slate-400 font-medium py-2 px-3 rounded-lg border-slate-400 ${
+            selectedCategory === item.category
+              ? "bg-blue-500 text-white"
+              : "bg-white"
+          }`}
+        >
+          {item.category}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   const category = [
     {
@@ -129,24 +100,11 @@ const Search = ({ navigation }) => {
       id: 5,
       category: "Ophthalmologists",
     },
+    {
+      id: 6,
+      category: "Dentist",
+    },
   ];
-  const renderDoctorCategory = ({ item }) => (
-    <View className="flex-row mr-4 items-center ">
-      <TouchableOpacity
-        className="flex-row"
-        onPress={() => setSelectedCategory(item.id)}
-      >
-        <Text
-          style={{ borderWidth: 1 }}
-          className={`text-slate-400 font-medium py-2 px-3 rounded-lg border-slate-400 ${
-            selectedCategory === item.id ? "bg-blue-500 text-white" : "bg-white"
-          }`}
-        >
-          {item.category}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
 
   const renderDoctorItem = ({ item }) => (
     <TouchableOpacity
@@ -154,18 +112,25 @@ const Search = ({ navigation }) => {
       className="flex-row items-center py-2 "
     >
       <View style={styles.doctorImageContainer}>
-        <Image source={item.image} style={styles.doctorImage} />
+        <Image
+          source={require("../../images/doctor.png")}
+          style={styles.doctorImage}
+        />
       </View>
       <View style={styles.doctorInfo}>
         <Text style={styles.doctorName}>{item.name}</Text>
         <View style={styles.doctorDetails}>
           <Text style={styles.doctorDetailsText}>{item.specialization}</Text>
-          <Text style={styles.doctorDetailsText}>{item.experience}</Text>
+          <Text style={styles.doctorDetailsText}>
+            {item.experience} years exp
+          </Text>
         </View>
-        <Text>Rating: {item.rating}</Text>
+        <Text style={{ fontFamily: "Poppins-Regular" }}>
+          Rating: {item.rating}
+        </Text>
       </View>
       <View>
-        <Text style={styles.doctorPrice}>${item.price}</Text>
+        <Text style={styles.doctorPrice}>$100{item.price}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -176,33 +141,40 @@ const Search = ({ navigation }) => {
         <Text style={styles.heading}>Doctors</Text>
       </View>
       <View style={styles.container} className="items-center">
+        {/* Lll? */}
         <View className="relative w-full flex-row items-center  ">
-          <View className="left-8 bottom-1">
+          <View className="left-8 bottom-2">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               className=" absolute "
               color="#b3b3b3"
             />
           </View>
-          <TextInput placeholder="Search" style={styles.searchInput} />
+          <TextInput
+            placeholder="Search"
+            style={styles.searchInput}
+            onChangeText={searchlist}
+            onSubmitEditing={handleSearchSubmit}
+          />
         </View>
-
-        <FlatList
-          horizontal
-          data={category}
-          key={(item) => item.id.toString()}
-          renderItem={renderDoctorCategory}
-          // style={styles.categories}
-          className="flex-row w-11/12  h-20 "
-        />
-        <FlatList
-          data={doctors}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderDoctorItem}
-          style={styles.doctorsList}
-          contentContainerStyle={{ paddingBottom: 60 }}
-        />
+        {/* lllll */}
+        <View className="w-full items-center justify-center mb-40">
+          <FlatList
+            horizontal
+            data={category}
+            key={(item) => item.id.toString()}
+            renderItem={renderDoctorCategory}
+            className="flex-row w-11/12 h-12 "
+          />
+          <FlatList
+            data={doctorData}
+            keyExtractor={(item) => item.doctorId.toString()}
+            renderItem={renderDoctorItem}
+          />
+          {doctorData === 0 && <Text> no data avaiable</Text>}
+        </View>
       </View>
+
       <Footer />
     </View>
   );
@@ -223,16 +195,14 @@ const styles = StyleSheet.create({
     borderColor: "#b3b3b3",
     paddingLeft: 40,
     fontSize: 16,
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 8,
     borderRadius: 10,
     marginBottom: 10,
     width: "90%",
+    fontFamily: "Poppins-Regular",
   },
-  categories: {
-    flexDirection: "row",
-    paddingBottom: 10,
-    backgroundColor: "black",
-  },
+
   categoryButton: {
     backgroundColor: "#3498db",
     borderRadius: 10,
@@ -250,7 +220,8 @@ const styles = StyleSheet.create({
   doctorItemContainer: {
     flexDirection: "row",
     borderBottomColor: "#ccc",
-    marginTop: 15,
+    marginTop: 5,
+    gap: 5,
   },
   doctorImageContainer: {
     width: "20%",
@@ -259,17 +230,17 @@ const styles = StyleSheet.create({
   },
   doctorImage: {
     width: "100%",
-    height: 70,
+    height: 80,
     borderRadius: 10,
   },
   doctorInfo: {
-    width: "70%",
+    width: "65%",
     paddingHorizontal: 10,
-    gap: 6,
+    rowGap: 2,
   },
   doctorName: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Poppins-Semibold",
   },
   doctorDetails: {
     flexDirection: "row",
@@ -277,10 +248,11 @@ const styles = StyleSheet.create({
   },
   doctorDetailsText: {
     color: "#808080",
+    fontFamily: "Poppins-Regular",
   },
   doctorPrice: {
     fontSize: 16,
-    fontWeight: "500",
+    fontFamily: "Poppins-Regular",
   },
 });
 

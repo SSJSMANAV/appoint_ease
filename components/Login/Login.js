@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,16 +11,34 @@ import {
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
+import { loginPatient } from "../../actions/action-creators/auth_action";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigation = useNavigation();
 
   const navigateToSignUp = () => {
     navigation.navigate("SignUp");
   };
 
-  const navigateToHome = () => {
-    navigation.navigate("Header");
+  const navigateToHome = async () => {
+    await loginPatient(email, password)
+      .then((data) => {
+        navigation.navigate("Home");
+      })
+      .catch((e) => {
+        alert(e.message);
+      });
+  };
+
+  const changeEmail = (email) => {
+    setEmail(email);
+  };
+
+  const changePassword = (password) => {
+    setPassword(password);
   };
 
   const forgotPassword = () => {
@@ -51,13 +69,15 @@ const Login = () => {
             <TextInput
               placeholder="Username"
               placeholderTextColor="grey"
-              className=" text-black bg-slate-100 px-5 py-2 rounded-md w-4/5 shadow-xl shadow-slate-500 "
+              className=" text-black bg-slate-100 px-5 py-2 rounded-md w-4/5 shadow-xl shadow-slate-500"
+              onChangeText={changeEmail}
             />
 
             <TextInput
               placeholder="Password"
               placeholderTextColor="grey"
               className="text-black bg-slate-100 px-5 py-2 rounded-md w-4/5  shadow-xl shadow-slate-500 "
+              onChangeText={changePassword}
             />
           </View>
           <View className="items-center">
@@ -91,7 +111,7 @@ const Login = () => {
           <View className="items-center mt-12">
             <TouchableOpacity>
               <Text className="font-normal">
-                Don't Have an account?{" "}
+                Don't Have an account?
                 <Text className="text-blue-700" onPress={navigateToSignUp}>
                   Sign up
                 </Text>

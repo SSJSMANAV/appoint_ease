@@ -13,13 +13,15 @@ import Main from "./components/Home/Main/Main";
 import Search from "./components/Search/Search";
 import Appointments from "./components/Appointment/Appointments";
 import Inbox from "./components/Inbox/Inbox";
+import FetchDoctor from "./components/Home/Home/Fetch";
+import DoctorDetails from "./components/Doctor_Details/Doctor_Details";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Header" component={Header} />
@@ -31,6 +33,8 @@ export default function App() {
         <Stack.Screen name="Search" component={Search} />
         <Stack.Screen name="Inbox" component={Inbox} />
         <Stack.Screen name="Appointments" component={Appointments} />
+        <Stack.Screen name="FetchDoctor" component={FetchDoctor} />
+        <Stack.Screen name="DoctorDetails" component={DoctorDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );
