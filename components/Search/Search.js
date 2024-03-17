@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { View, Text, StyleSheet, Image } from "react-native";
 import {
   FlatList,
@@ -12,8 +13,12 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { fetchDoctorsList } from "../../actions/doctor-action";
 import Footer from "../Home/Footer/Footer";
 import { useFonts } from "expo-font";
+import { useDispatch } from "react-redux";
+import { fetchDoctorsByName } from "../../actions/action-creators/doctors_list_action";
+import { useNavigation } from "@react-navigation/native";
+// import DoctorDetails from "../Doctor_Details/Doctor_Details";
 
-const Search = ({ navigation }) => {
+const Search = () => {
   let [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Semibold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
@@ -23,25 +28,33 @@ const Search = ({ navigation }) => {
     return null;
   }
 
+  const navigation = useNavigation();
+
+  const navigateToDoctor = (doctor) => {
+    navigation.navigate("DoctorDetails", { data: doctor });
+  };
+
   const [selectedCategory, setSelectedCategory] = useState("All"); // Updated initial state
   const [doctorData, setDoctorData] = useState([]);
+
   const [doctorName, setDoctorName] = useState("");
+  const [error, setError] = useState(null);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  const handleCategoryPress = (category) => {
-    setSelectedCategory(category);
-    console.log("Category" + selectedCategory);
+  const handleSearchSubmit = async () => {
+    console.log("This is the doctor's Name:" + doctorName);
+    try {
+      const fetchData = await fetchDoctorsByName(doctorName);
+      setDoctorData(fetchData);
+      console.log("Fetch Result" + doctorData);
+    } catch (err) {
+      console.log(err);
+      console.log("yeta");
+      setDoctorData([]);
+      setError(err.message);
+      console.log("No one named: " + doctorData);
+    }
   };
-
-  const searchlist = (name) => {
-    console.log(name);
-    setDoctorName(name);
-  };
-
-  const handleSearchSubmit = () => {
-    console.log(doctorName);
-  };
-
-  const searchData = async () => {};
 
   const loadData = async () => {
     try {
@@ -49,10 +62,18 @@ const Search = ({ navigation }) => {
       console.log("Category being fetched:", category); // Log the category being fetched
       const fetchData = await fetchDoctorsList(category);
       setDoctorData(fetchData.result);
-      console.log("Doctor data:", fetchData.result);
+      console.log("Doctor data: ", fetchData.result);
     } catch (err) {
-      console.log("Error: " + err);
+      setError(err.message);
+      console.log(err);
+      setDoctorData([]);
+      // console.log("Error: " + err);
     }
+  };
+
+  const handleCategoryPress = (category) => {
+    setSelectedCategory(category);
+    loadData();
   };
 
   useEffect(() => {
@@ -108,6 +129,9 @@ const Search = ({ navigation }) => {
 
   const renderDoctorItem = ({ item }) => (
     <TouchableOpacity
+      onPress={() => {
+        navigateToDoctor(item);
+      }}
       style={styles.doctorItemContainer}
       className="flex-row items-center py-2 "
     >
@@ -153,11 +177,14 @@ const Search = ({ navigation }) => {
           <TextInput
             placeholder="Search"
             style={styles.searchInput}
-            onChangeText={searchlist}
-            onSubmitEditing={handleSearchSubmit}
+            value={doctorName}
+            onChangeText={(text) => setDoctorName(text)}
+            onSubmitEditing={() => {
+              handleSearchSubmit(doctorName);
+            }}
           />
         </View>
-        {/* lllll */}
+
         <View className="w-full items-center justify-center mb-40">
           <FlatList
             horizontal
@@ -171,7 +198,7 @@ const Search = ({ navigation }) => {
             keyExtractor={(item) => item.doctorId.toString()}
             renderItem={renderDoctorItem}
           />
-          {doctorData === 0 && <Text> no data avaiable</Text>}
+          {doctorData.length === 0 && error && <Text> {error} </Text>}
         </View>
       </View>
 

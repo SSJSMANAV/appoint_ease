@@ -39,8 +39,10 @@ export const fetchDoctorsByName = async (name, token) => {
       console.log("al;sdfsjdlfskjfsldk");
       console.log(jsonData);
       console.log("al;sdfsjdlfskjfsldk");
+      console.log(jsonData.result);
       return jsonData.result;
     } else {
+      console.log(jsonData);
       throw Error(jsonData.message);
     }
   } catch (e) {

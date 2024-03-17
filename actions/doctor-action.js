@@ -5,17 +5,19 @@ export const fetchDoctorsList = async (speciality) => {
       method: "GET",
     });
 
+    console.log("no data in name");
     console.log(response.status);
+    console.log("no data in name");
+    const jsonData = await response.json();
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    if (!jsonData.result) {
+      throw new Error("No data found.");
     } else {
-      const jsonData = await response.json();
-      // console.log(jsonData);
+      console.log(jsonData);
       return jsonData;
     }
   } catch (error) {
-    console.error("Error fetching doctors:", error);
-    throw error;
+    // console.error("Error fetching doctors:", error);
+    throw Error(error.message);
   }
 };

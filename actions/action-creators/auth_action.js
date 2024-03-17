@@ -3,9 +3,10 @@
 
 export const registerPatient = async (patient) => {
   console.log("register patient");
-  const url = "http://localhost:3009/user/signup";
+  console.log(patient);
+  const url = "http://192.168.101.6:3009/user/signup";
 
-  const imageFile = new File([patient.image], patient.image.name);
+  const imageFile = new File([patient.imageFile], patient.imageFile.name);
   const formData = new FormData();
 
   formData.append("name", patient.username);

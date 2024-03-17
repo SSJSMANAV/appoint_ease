@@ -2,6 +2,7 @@ import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
+import { useRoute } from "@react-navigation/native";
 
 const DoctorDetails = () => {
   let [fontsLoaded] = useFonts({
@@ -12,6 +13,11 @@ const DoctorDetails = () => {
   if (!fontsLoaded) {
     return null;
   }
+
+  const route = useRoute();
+  const { data } = route.params;
+
+  console.log(data);
 
   return (
     <View className="flex-1 items-center">
