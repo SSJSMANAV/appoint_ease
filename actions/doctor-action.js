@@ -1,6 +1,8 @@
+import { BASE_URL } from "./action-creators/config";
+
 export const fetchDoctorsList = async (speciality) => {
   try {
-    const url = `http://192.168.101.6:3009/doctor/getalldoctors?find=${speciality}`;
+    const url = `${BASE_URL}/doctor/getalldoctors?find=${speciality}`;
     const response = await fetch(url, {
       method: "GET",
     });

@@ -1,7 +1,9 @@
+import { BASE_URL } from "./config";
+
 export const fetchDoctorsList = async (speciality) => {
   console.log(speciality);
   try {
-    const url = `http://192.168.101.6:3009/doctor/getalldoctors?find=${speciality}`;
+    const url = `${BASE_URL}/doctor/getalldoctors?find=${speciality}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -25,7 +27,7 @@ export const fetchDoctorsList = async (speciality) => {
 export const fetchDoctorsByName = async (name, token) => {
   console.log(name);
   try {
-    const url = `http://192.168.101.6:3009/doctor/serchdoctor?name=${name}`;
+    const url = `${BASE_URL}/doctor/serchdoctor?name=${name}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -53,7 +55,7 @@ export const fetchDoctorsByName = async (name, token) => {
 export const fetchDoctorById = async (id) => {
   console.log(id);
   try {
-    const url = `http://192.168.101.6:3009/doctor/getdoctorbyid/${id}`;
+    const url = `http://${BASE_URL}:3009/doctor/getdoctorbyid/${id}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -78,7 +80,7 @@ export const fetchSchedules = async (date, token, doctorId) => {
   console.log("fetch Schedule");
   console.log(date);
   try {
-    const url = `http://192.168.101.6:3009/schedule/get-all-schedule/${doctorId}?date=${date}`;
+    const url = `http://${BASE_URL}:3009/schedule/get-all-schedule/${doctorId}?date=${date}`;
 
     const response = await fetch(url, {
       method: "GET",

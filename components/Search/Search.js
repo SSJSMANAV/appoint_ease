@@ -36,7 +36,7 @@ const Search = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("All"); // Updated initial state
   const [doctorData, setDoctorData] = useState([]);
-
+  //
   const [doctorName, setDoctorName] = useState("");
   const [error, setError] = useState(null);
   // const [isLoading, setIsLoading] = useState(false);

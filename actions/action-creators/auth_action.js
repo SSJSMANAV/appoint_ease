@@ -1,10 +1,12 @@
 // import { authSliceActions } from "../slices/auth_slice";
 // import currentUser from "../constants";
+// Your code files
+import { BASE_URL } from "./config";
 
 export const registerPatient = async (patient) => {
   console.log("register patient");
   console.log(patient);
-  const url = "http://192.168.101.6:3009/user/signup";
+  const url = `http://${BASE_URL}:3009/user/signup`;
 
   const imageFile = new File([patient.imageFile], patient.imageFile.name);
   const formData = new FormData();
@@ -43,7 +45,7 @@ export const registerPatient = async (patient) => {
 export const registerDoctorRequest = async (doctorData, token) => {
   console.log(doctorData.speciality);
   console.log(doctorData);
-  const url = "http://localhost:3009/user/applyasdoctor";
+  const url = `http://${BASE_URL}:3009/user/applyasdoctor`;
 
   const formData = new FormData();
   for (let i = 0; i < doctorData.education.length; i++) {
@@ -95,7 +97,7 @@ export const registerDoctorRequest = async (doctorData, token) => {
 };
 
 export const loginPatient = async (email, password) => {
-  const url = "http://192.168.101.6:3009/user/login";
+  const url = `http://${BASE_URL}:3009/user/login`;
   try {
     const response = await fetch(url, {
       method: "POST",

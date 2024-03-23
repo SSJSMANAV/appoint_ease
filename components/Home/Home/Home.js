@@ -17,6 +17,7 @@ import { useFonts } from "expo-font";
 import { RefreshControl } from "react-native";
 import { style } from "../../Style/style";
 import FetchDoctor from "./Fetch";
+import List from "./List";
 
 const Home = () => {
   let [fontsLoaded] = useFonts({
@@ -50,53 +51,53 @@ const Home = () => {
   const containerColors = ["#e0ccff", "#b3d9ff", "#ffb380"];
   const bellIconContainers = ["#d1b3ff", "#66b3ff", "#ff8533"];
 
-  const renderItem = ({ item, index }) => (
-    <View
-      style={[styles.container, { backgroundColor: containerColors[index] }]}
-      className="w-4/6"
-    >
-      <TouchableOpacity>
-        <View className="ml-4 pr-6 gap-y-5">
-          <View>
-            <View
-              style={[
-                styles.bellIconContainer,
-                { backgroundColor: bellIconContainers[index] },
-              ]}
-            >
-              <FontAwesomeIcon icon={item.icon} size={22} color={item.color} />
-            </View>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.doctorsText}>{item.doctors} doctors</Text>
-            </View>
-          </View>
-          <View style={styles.imageContainer}>
-            {[1, 2, 3, 4].map((index) => (
-              <Image
-                key={index}
-                source={require("../../../images/doctor.png")}
-                style={styles.doctorImage}
-              />
-            ))}
-            <Text
-              className=" bg-blue-100 rounded-full ml-[-12] text-lg "
-              style={{
-                paddingTop: 4,
-                paddingHorizontal: 5,
-                fontSize: 15,
-                borderWidth: 2,
-                borderColor: "#fff",
-                fontFamily: "Poppins-Regular",
-              }}
-            >
-              +9
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+  // const renderItem = ({ item, index }) => (
+  //   <View
+  //     style={[styles.container, { backgroundColor: containerColors[index] }]}
+  //     className="w-4/6"
+  //   >
+  //     <TouchableOpacity>
+  //       <View className="ml-4 pr-6 gap-y-5">
+  //         <View>
+  //           <View
+  //             style={[
+  //               styles.bellIconContainer,
+  //               { backgroundColor: bellIconContainers[index] },
+  //             ]}
+  //           >
+  //             <FontAwesomeIcon icon={item.icon} size={22} color={item.color} />
+  //           </View>
+  //           <View style={styles.titleContainer}>
+  //             <Text style={styles.title}>{item.title}</Text>
+  //             <Text style={styles.doctorsText}>{item.doctors} doctors</Text>
+  //           </View>
+  //         </View>
+  //         <View style={styles.imageContainer}>
+  //           {[1, 2, 3, 4].map((index) => (
+  //             <Image
+  //               key={index}
+  //               source={require("../../../images/doctor.png")}
+  //               style={styles.doctorImage}
+  //             />
+  //           ))}
+  //           <Text
+  //             className=" bg-blue-100 rounded-full ml-[-12] text-lg "
+  //             style={{
+  //               paddingTop: 4,
+  //               paddingHorizontal: 5,
+  //               fontSize: 15,
+  //               borderWidth: 2,
+  //               borderColor: "#fff",
+  //               fontFamily: "Poppins-Regular",
+  //             }}
+  //           >
+  //             +9
+  //           </Text>
+  //         </View>
+  //       </View>
+  //     </TouchableOpacity>
+  //   </View>
+  // );
 
   return (
     <View style={styles.mainContainer}>
@@ -138,7 +139,7 @@ const Home = () => {
               <Text style={styles.sectionTitle}>your suitable doctor</Text>
             </View>
             <View className="w-full flex">
-              <FlatList
+              {/* <FlatList
                 data={data}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
@@ -147,7 +148,8 @@ const Home = () => {
                 ItemSeparatorComponent={renderSeparator}
                 showsHorizontalScrollIndicator={false}
                 // Ensure proper flex behavior
-              />
+              /> */}
+              <List />
             </View>
           </View>
           {/* 3rd Container */}
