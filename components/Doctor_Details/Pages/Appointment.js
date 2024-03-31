@@ -1,16 +1,71 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { fetchSchedules } from "../../../actions/action-creators/doctors_list_action";
 
-const Appointment = () => {
+const Appointment = ({ doctorId }) => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("date");
+  const [token, setToken] = useState("");
+
+  const fetchToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (token !== null) {
+        console.log("token " + token);
+        setToken(token);
+        // Token exists in AsyncStorage
+        return token;
+      } else {
+        // Token doesn't exist
+        console.log(" no token");
+        return null;
+      }
+    } catch (error) {
+      // Error handling if AsyncStorage fails
+      console.error("Error fetching token:", error);
+      throw new Error("Failed to fetch token");
+    }
+  };
+
+  const timeStamp = Date.now();
+  const dateObject = new Date(timeStamp);
+  const [selectedDate, setSelectedDate] = useState(dateObject);
+  const [isLoading, setIsLoading] = useState(false);
+  const [schedule, setSchedule] = useState([]);
+
+  const fetchDoctorSchedule = async (date) => {
+    // const formattedDate = date.toISOString().split("T")[0];
+    setSchedule([]);
+    setIsLoading(true);
+    try {
+      await fetchSchedules(date, token, doctorId).then((data) => {
+        setIsLoading(false);
+        console.log(data.result[0].timeslot);
+        setSchedule(data.result[0].timeslot);
+      });
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchToken().then(() => {
+      const timeStamp = Date.now();
+      fetchDoctorSchedule(new Date(timeStamp).toISOString().split("T")[0]);
+    });
+  }, []);
 
   const onChange = (e, selectedDate) => {
-    setDate(selectedDate);
     setShow(false);
+
+    setSelectedDate(selectedDate);
+
+    fetchDoctorSchedule(selectedDate.toISOString().split("T")[0]);
   };
 
   const showMode = (modeToShow) => {
