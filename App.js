@@ -1,5 +1,6 @@
 // App.js
 import React from "react";
+import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./components/Login/Login";
@@ -15,14 +16,22 @@ import Appointments from "./components/Appointment/Appointments";
 import Inbox from "./components/Inbox/Inbox";
 import FetchDoctor from "./components/Home/Home/Fetch";
 import DoctorDetails from "./components/Doctor_Details/Doctor_Details";
-import Map from "./components/Doctor_Details/Pages/map";
+import Packages from "./components/Home/Home/Packages";
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Semibold": require("./assets/fonts/Poppins-SemiBold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Header" component={Header} />
@@ -36,7 +45,7 @@ export default function App() {
         <Stack.Screen name="Appointments" component={Appointments} />
         <Stack.Screen name="FetchDoctor" component={FetchDoctor} />
         <Stack.Screen name="DoctorDetails" component={DoctorDetails} />
-        <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="Packages" component={Packages} />
       </Stack.Navigator>
     </NavigationContainer>
   );

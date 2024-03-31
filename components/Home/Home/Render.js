@@ -19,8 +19,7 @@ const RenderItem = ({ item, index }) => {
   const containerColors = ["#e0ccff", "#b3d9ff", "#ffb380"];
   const bellIconContainers = ["#d1b3ff", "#66b3ff", "#ff8533"];
 
-  const [slkd, lsdkfj] = useState("");
-
+  // const [slkd, lsdkfj] = useState("");
   // useEffect(() => {
   //   const fetchDoctorBySpeciality = async () => {
   //       await fetchDoctorsList(item.title);

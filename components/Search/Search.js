@@ -192,6 +192,7 @@ const Search = () => {
             key={(item) => item.id.toString()}
             renderItem={renderDoctorCategory}
             className="flex-row w-11/12 h-12 "
+            showsHorizontalScrollIndicator={false}
           />
           <FlatList
             data={doctorData}

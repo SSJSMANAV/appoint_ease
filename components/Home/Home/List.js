@@ -18,6 +18,13 @@ import RenderItem from "./Render";
 const List = () => {
   const data = [
     {
+      id: "1",
+      title: "Cardiologist",
+      doctors: 8,
+      icon: faBell,
+      color: "#3399ff",
+    },
+    {
       id: "2",
       title: "Dentist",
       doctors: 8,

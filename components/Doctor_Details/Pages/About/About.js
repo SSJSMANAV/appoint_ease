@@ -6,15 +6,17 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  FlatList,
 } from "react-native";
 import { useFonts } from "expo-font";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
+import Schedule from "./Schedule";
 
 const About = () => {
   let [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Semibold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Regular": require("../../../../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Semibold": require("../../../../assets/fonts/Poppins-SemiBold.ttf"),
   });
 
   const [allText, setAllText] = useState(false);
@@ -31,10 +33,30 @@ const About = () => {
     setText(allText ? "See More..." : "See Less...");
   };
 
-  // const containerHeight = allText ? "80%" : "70%";f
+  const data = [
+    { id: "1", status: "Available", time: "8:00 AM - 9:00 AM" },
+    { id: "2", status: "Available", time: "8:00 AM - 9:00 AM" },
+    { id: "3", status: "Available", time: "8:00 AM - 9:00 AM" },
+
+    // Add more data items as needed
+  ];
+
+  const renderItem = ({ item }) => (
+    <View style={styles.itemContainer} className="bg-blue-200">
+      <View style={styles.detailsContainer}>
+        <Text style={styles.bookDetails}>{item.status}</Text>
+        <Text style={styles.bookDetails}>{item.time}</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.bookButton}>
+          <Text style={styles.bookButtonText}>Book</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   return (
-    <View style={styles.maincontainer}>
+    <ScrollView style={styles.maincontainer} className="h-full">
       <View className="">
         {!allText && (
           <View>
@@ -63,7 +85,7 @@ const About = () => {
         {allText && (
           <View>
             <ScrollView
-              className="h-auto bg-red-300"
+              className="h-auto "
 
               // className="flex-wrap"
             >
@@ -81,7 +103,7 @@ const About = () => {
               </Text>
             </ScrollView>
             <TouchableOpacity className="min-w-fit" onPress={toggleText}>
-              <Text className="px-3 py-1 bg-red-400 -mt-7 " style={styles.text}>
+              <Text className="px-3 py-1  -mt-7" style={styles.text}>
                 {text}
               </Text>
             </TouchableOpacity>
@@ -102,12 +124,7 @@ const About = () => {
           </MapView>
         </View>
       </View>
-      <View>
-        <View>
-          <Text></Text>
-        </View>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -126,6 +143,36 @@ const styles = StyleSheet.create({
   text: {
     color: "grey",
     fontFamily: "Poppins-Regular",
+  },
+  itemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    marginTop: 5,
+    borderRadius: 10,
+  },
+  detailsContainer: {
+    justifyContent: "center",
+  },
+  bookDetails: {
+    fontSize: 15,
+    fontFamily: "Poppins-Regular",
+  },
+  buttonContainer: {
+    paddingVertical: 10,
+  },
+  bookButton: {
+    backgroundColor: "#3B82F6",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+  bookButtonText: {
+    color: "white",
+    fontFamily: "Poppins-Regular",
+  },
+  timeText: {
+    fontFamily: "Poppins-Semibold",
   },
 });
 

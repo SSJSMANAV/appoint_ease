@@ -18,17 +18,9 @@ import { RefreshControl } from "react-native";
 import { style } from "../../Style/style";
 import FetchDoctor from "./Fetch";
 import List from "./List";
+import Packages from "./Packages";
 
 const Home = () => {
-  let [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Semibold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   const data = [
     { id: "1", title: "Cardio", doctors: 12, icon: faHeart, color: "#a366ff" },
     {
@@ -51,53 +43,7 @@ const Home = () => {
   const containerColors = ["#e0ccff", "#b3d9ff", "#ffb380"];
   const bellIconContainers = ["#d1b3ff", "#66b3ff", "#ff8533"];
 
-  // const renderItem = ({ item, index }) => (
-  //   <View
-  //     style={[styles.container, { backgroundColor: containerColors[index] }]}
-  //     className="w-4/6"
-  //   >
-  //     <TouchableOpacity>
-  //       <View className="ml-4 pr-6 gap-y-5">
-  //         <View>
-  //           <View
-  //             style={[
-  //               styles.bellIconContainer,
-  //               { backgroundColor: bellIconContainers[index] },
-  //             ]}
-  //           >
-  //             <FontAwesomeIcon icon={item.icon} size={22} color={item.color} />
-  //           </View>
-  //           <View style={styles.titleContainer}>
-  //             <Text style={styles.title}>{item.title}</Text>
-  //             <Text style={styles.doctorsText}>{item.doctors} doctors</Text>
-  //           </View>
-  //         </View>
-  //         <View style={styles.imageContainer}>
-  //           {[1, 2, 3, 4].map((index) => (
-  //             <Image
-  //               key={index}
-  //               source={require("../../../images/doctor.png")}
-  //               style={styles.doctorImage}
-  //             />
-  //           ))}
-  //           <Text
-  //             className=" bg-blue-100 rounded-full ml-[-12] text-lg "
-  //             style={{
-  //               paddingTop: 4,
-  //               paddingHorizontal: 5,
-  //               fontSize: 15,
-  //               borderWidth: 2,
-  //               borderColor: "#fff",
-  //               fontFamily: "Poppins-Regular",
-  //             }}
-  //           >
-  //             +9
-  //           </Text>
-  //         </View>
-  //       </View>
-  //     </TouchableOpacity>
-  //   </View>
-  // );
+  //
 
   return (
     <View style={styles.mainContainer}>
@@ -139,21 +85,11 @@ const Home = () => {
               <Text style={styles.sectionTitle}>your suitable doctor</Text>
             </View>
             <View className="w-full flex">
-              {/* <FlatList
-                data={data}
-                keyExtractor={(item) => item.id}
-                renderItem={renderItem}
-                horizontal={true}
-                contentContainerStyle={{ flexGrow: 1 }}
-                ItemSeparatorComponent={renderSeparator}
-                showsHorizontalScrollIndicator={false}
-                // Ensure proper flex behavior
-              /> */}
               <List />
             </View>
           </View>
           {/* 3rd Container */}
-          <View className="mt-2 pt-6 mb-6 bg-blue-200  rounded-2xl ">
+          <View className="mt-2 pt-6  bg-blue-200  rounded-2xl ">
             <View className="pl-2 flex-row justify-between">
               <Text
                 style={{ fontFamily: "Poppins-Semibold" }}
@@ -173,8 +109,7 @@ const Home = () => {
           </View>
           {/* 4th Container */}
           <View className="">
-            <Text>Hi</Text>
-            <Image source={require("../../../images/doctor.png")} />
+            <Packages />
           </View>
         </View>
       </ScrollView>
