@@ -77,10 +77,13 @@ export const fetchDoctorById = async (id) => {
 };
 
 export const fetchSchedules = async (date, token, doctorId) => {
+
   console.log("fetch Schedule");
   console.log(date);
+  console.log(doctorId);
+  console.log(token);
   try {
-    const url = `http://${BASE_URL}:3009/schedule/get-all-schedule/${doctorId}?date=${date}`;
+    const url = `${BASE_URL}/schedule/get-all-schedule/${doctorId}?date=${date}`;
 
     const response = await fetch(url, {
       method: "GET",

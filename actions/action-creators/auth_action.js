@@ -2,6 +2,8 @@
 // import currentUser from "../constants";
 // Your code files
 import { BASE_URL } from "./config";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export const registerPatient = async (patient) => {
   console.log("register patient");
@@ -97,7 +99,9 @@ export const registerDoctorRequest = async (doctorData, token) => {
 };
 
 export const loginPatient = async (email, password) => {
-  const url = `http://${BASE_URL}:3009/user/login`;
+  console.log(email);
+  console.log(password);
+  const url = `${BASE_URL}/user/login`;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -114,10 +118,7 @@ export const loginPatient = async (email, password) => {
     console.log("login data");
     console.log(jsonData);
     if (response.status === 200) {
-      // currentUser = jsonData.user;
-      // localStorage.setItem("token", jsonData.token);
-      // localStorage.setItem("role", jsonData.user.role);
-      // localStorage.setItem("user", JSON.stringify(jsonData.user));
+      await AsyncStorage.setItem("token", jsonData.token);
       console.log("tada");
       return jsonData;
     } else {

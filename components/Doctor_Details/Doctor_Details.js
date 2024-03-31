@@ -113,7 +113,7 @@ const DoctorDetails = () => {
           </TouchableOpacity>
         </View>
         {activePage === "About" && <About />}
-        {activePage === "Appointment" && <Appointment />}
+        {activePage === "Appointment" && <Appointment doctorId={data.doctorId} />}
         {activePage === "Rating" && <Rating />}
       </View>
     </View>
