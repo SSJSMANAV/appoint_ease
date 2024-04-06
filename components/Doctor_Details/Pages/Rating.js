@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,54 +10,71 @@ import {
   TouchableWithoutFeedback,
   Pressable,
   Alert,
+  ToastAndroid,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FlatList } from "react-native-gesture-handler";
+import { BASE_URL, tokenContainer } from "../../../actions/action-creators/config";
 
-const data = [
-  {
-    id: "1",
-    name: "Tesha Shree Shrestha",
-    rating: 5, // 5 stars
-    review:
-      "Dr. Emily Smith is an outstanding cardiologist. Highly recommended!",
-  },
-  {
-    id: "2",
-    name: "John Doe",
-    rating: 4, // 4 stars
-    review: "Dr. Emily Smith provided excellent care during my visit. ",
-  },
-  {
-    id: "3",
-    name: "John Doe",
-    rating: 4, // 4 stars
-    review: "Dr. Emily Smith provided excellent care during my visit. ",
-  },
-  {
-    id: "4",
-    name: "John Doe",
-    rating: 4, // 4 stars
-    review: "Dr. Emily Smith provided excellent care during my visit. ",
-  },
-  {
-    id: "5",
-    name: "Johnath Doe",
-    rating: 4, // 4 stars
-    review: "Dr. Emily Smith provided excellent care during my visit. ",
-  },
-  {
-    id: "6",
-    name: "John Doey",
-    rating: 4, // 4 stars
-    review: "Dr. Emily Smith provided excellent care during my visit. ",
-  },
-];
-
-const Rating = () => {
+const Rating = ({ doctorId }) => {
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [reviews, setReviews] = useState([]);
+
+  const handlePostRating = async () => {
+    console.log(rating);
+    console.log(comment);
+    const url = `${BASE_URL}/feedback/${doctorId}`;
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${tokenContainer.token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          rating: rating,
+          comment: comment,
+        }),
+      });
+      console.log(response.status);
+      const jsonData = await response.json();
+      console.log(jsonData);
+      if (response.status === 200) {
+        console.log(jsonData);
+        ToastAndroid.show(jsonData.message, ToastAndroid.LONG);
+      } else {
+        ToastAndroid.show(jsonData.message, ToastAndroid.LONG);
+      }
+    } catch (e) {
+      console.log(e.message);
+      ToastAndroid.show(e.message, ToastAndroid.LONG);
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const url = `http://192.168.18.6:3009/feedback/${doctorId}`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${tokenContainer.token}`,
+        },
+      });
+      console.log(response.status);
+      const jsonData = await response.json();
+      if (response.status === 200) {
+        console.log(jsonData.result);
+        setReviews(jsonData.result);
+      } else {
+        toast.error(jsonData.message);
+        setReviews([]);
+      }
+    } catch (e) {}
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.container}>
@@ -78,11 +95,18 @@ const Rating = () => {
         </View>
 
         <View style={styles.reviewContainer}>
-          <Text style={styles.reviewText}>{item.review}</Text>
+          <Text style={styles.reviewText}>{item.comment}</Text>
         </View>
       </View>
     </View>
   );
+
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(1);
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
 
   return (
     <View style={{ marginTop: 10, gap: 10, height: "100%" }}>
@@ -98,12 +122,24 @@ const Rating = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <TextInput style={styles.modalText} />
+            <TextInput value={comment} style={styles.modalText} onChangeText={(value) => {
+              setComment(value);
+            }} />
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
             >
               <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                handlePostRating();
+                setComment('');
+                setRating(0);
+              }}
+            >
+              <Text style={styles.textStyle}>Submit</Text>
             </Pressable>
           </View>
         </View>
@@ -120,7 +156,7 @@ const Rating = () => {
       </View>
       <View style={{ height: "51%", minHeight: "auto" }}>
         <FlatList
-          data={data}
+          data={reviews}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
