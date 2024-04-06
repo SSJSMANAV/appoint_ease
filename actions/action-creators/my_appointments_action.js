@@ -1,6 +1,8 @@
+import { BASE_URL } from "./config";
+
 export const fetchMyAppointments = async (token) => {
   try {
-    const url = `http://localhost:3009/appointment/get-appointment`;
+    const url = `${BASE_URL}/appointment/get-appointment`;
 
     const response = await fetch(url, {
       method: "GET",

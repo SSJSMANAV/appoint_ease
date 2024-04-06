@@ -2,8 +2,7 @@
 // import currentUser from "../constants";
 // Your code files
 import { BASE_URL } from "./config";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const registerPatient = async (patient) => {
   console.log("register patient");
@@ -119,6 +118,7 @@ export const loginPatient = async (email, password) => {
     console.log(jsonData);
     if (response.status === 200) {
       await AsyncStorage.setItem("token", jsonData.token);
+
       console.log("tada");
       return jsonData;
     } else {

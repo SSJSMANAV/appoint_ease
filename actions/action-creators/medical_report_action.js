@@ -1,3 +1,5 @@
+import { BASE_URL } from "./config";
+
 export const postMedicalReport = async (
   token,
   patientId,
@@ -39,7 +41,7 @@ export const postMedicalReport = async (
 export const fetchMedicalReportById = async (token, appointmentId) => {
   console.log(appointmentId);
   try {
-    const url = `http://localhost:3009/report/fetch-report/${appointmentId}`;
+    const url = `${BASE_URL}/report/fetch-report/${appointmentId}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -50,7 +52,6 @@ export const fetchMedicalReportById = async (token, appointmentId) => {
     console.log(response.status);
     const jsonData = await response.json();
     if (response.status === 200) {
-      console.log(jsonData);
       return jsonData;
     } else {
       throw Error(jsonData.message);
