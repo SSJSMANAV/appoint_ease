@@ -41,9 +41,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 15,
+    paddingVertical: 10,
     marginTop: 5,
     borderRadius: 10,
-    backgroundColor: "#93ACD9",
+    borderWidth: 2,
+    borderColor: "#93ACD9",
+    // backgroundColor: "#93ACD9",
   },
   detailsContainer: {
     justifyContent: "center",
@@ -53,17 +56,30 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
   },
   bookButton: {
-    backgroundColor: "#335D9F",
+    // backgroundColor: "#335D9F",
+    minWidth: 80,
+    borderColor: "#0066cc",
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "black",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
   },
   bookButtonText: {
-    color: "white",
+    color: "black",
     fontFamily: "Poppins-Regular",
   },
   timeText: {
     fontFamily: "Poppins-Semibold",
+  },
+  bookedButton: {
+    backgroundColor: "#ff3300",
+    borderColor: "white",
+  },
+  bookedButtonText: {
+    color: "white",
   },
 });
 
@@ -137,8 +153,10 @@ const RenderItem = ({ item, doctorId, token, date }) => {
           </TouchableOpacity>
         )}
         {booked && (
-          <TouchableOpacity style={styles.bookButton}>
-            <Text style={styles.bookButtonText}>Booked</Text>
+          <TouchableOpacity style={[styles.bookButton, styles.bookedButton]}>
+            <Text style={[styles.bookButtonText, styles.bookedButtonText]}>
+              Booked
+            </Text>
           </TouchableOpacity>
         )}
       </View>

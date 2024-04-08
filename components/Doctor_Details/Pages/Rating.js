@@ -16,7 +16,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FlatList } from "react-native-gesture-handler";
-import { BASE_URL, tokenContainer } from "../../../actions/action-creators/config";
+import {
+  BASE_URL,
+  tokenContainer,
+} from "../../../actions/action-creators/config";
 
 const Rating = ({ doctorId }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -56,7 +59,7 @@ const Rating = ({ doctorId }) => {
 
   const fetchReviews = async () => {
     try {
-      const url = `http://192.168.18.6:3009/feedback/${doctorId}`;
+      const url = `http://192.168.101.2:3009/feedback/${doctorId}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -85,7 +88,7 @@ const Rating = ({ doctorId }) => {
             style={styles.profileImage}
           />
           <View style={styles.textContainer}>
-            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.name}>{item.username}</Text>
             <View style={styles.ratingContainer}>
               {[...Array(item.rating)].map((_, index) => (
                 <FontAwesomeIcon key={index} icon={faStar} color="#ffcc00" />
@@ -122,25 +125,31 @@ const Rating = ({ doctorId }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <TextInput value={comment} style={styles.modalText} onChangeText={(value) => {
-              setComment(value);
-            }} />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => {
-                handlePostRating();
-                setComment('');
-                setRating(0);
+            <TextInput
+              value={comment}
+              style={styles.modalText}
+              onChangeText={(value) => {
+                setComment(value);
               }}
-            >
-              <Text style={styles.textStyle}>Submit</Text>
-            </Pressable>
+            />
+            <View className="flex-row justify-between w-4/5">
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  handlePostRating();
+                  setComment("");
+                  setRating(0);
+                }}
+              >
+                <Text style={styles.textStyle}>Submit</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>

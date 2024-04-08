@@ -1,4 +1,4 @@
 // config.js
-export const BASE_URL = "http://192.168.18.6:3009";
+export const BASE_URL = "http://192.168.101.2:3009";
 
-export let tokenContainer = { token: '' };
+export let tokenContainer = { token: "" };

@@ -18,6 +18,7 @@ import FetchDoctor from "./components/Home/Home/Fetch";
 import DoctorDetails from "./components/Doctor_Details/Doctor_Details";
 import Packages from "./components/Home/Home/Packages";
 import MedicalReport from "./components/Appointment/medical_report";
+import Dropdown from "./components/Appointment/Dropdown";
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,7 @@ export default function App() {
         <Stack.Screen name="DoctorDetails" component={DoctorDetails} />
         <Stack.Screen name="Packages" component={Packages} />
         <Stack.Screen name="Report" component={MedicalReport} />
+        <Stack.Screen name="Dropdown" component={Dropdown} />
       </Stack.Navigator>
     </NavigationContainer>
   );
