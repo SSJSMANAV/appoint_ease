@@ -3,11 +3,24 @@
 // Your code files
 import { BASE_URL } from "./config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import mime from "mime";
+
+// address: "Hsnsnan"
+// dob: {}
+// email: "sagarprajapati9803@gmail.com"
+// image: null
+// imageFile:
+// mimeType: "image/jpeg"
+// name: "IMG-20240414-WA0001.jpg"
+// size: 145220
+// uri: "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/9cd36fcb-eefc-4fe5-8ba3-f788a791e216.jpg"
+// __proto__: {__proto__: null, constructor: ƒ, toString: ƒ, toLocaleString: ƒ, valueOf: ƒ, hasOwnProperty: ƒ, isPrototypeOf: ƒ, propertyIsEnumerable: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, …}
+// password: "sagar9803"
+// phoneNumber: "9810574422"
+// username: "Sagar"
 
 export const registerPatient = async (patient) => {
-  console.log("register patient");
-  console.log(patient);
-  const url = `http://${BASE_URL}:3009/user/signup`;
+  const url = `${BASE_URL}/user/signup`;
 
   const imageFile = new File([patient.imageFile], patient.imageFile.name);
   const formData = new FormData();
@@ -15,24 +28,28 @@ export const registerPatient = async (patient) => {
   formData.append("name", patient.username);
   formData.append("email", patient.email);
   formData.append("address", patient.address);
-  formData.append("dob", patient.dob);
+  formData.append("dob", "2024/12/12");
   formData.append("password", patient.password);
-  formData.append("image", imageFile);
+  formData.append("image", {
+    uri: patient.imageFile.uri,
+    type: patient.imageFile.mimeType,
+    name: patient.imageFile.name,
+  });
 
   try {
     const response = await fetch(url, {
       method: "POST",
       body: formData,
-      headers: {},
+      headers: {
+        Content: "multipart/form-data",
+      },
     });
     console.log(response.status);
     const jsonData = await response.json();
     console.log(jsonData);
 
     if (response.status === 200) {
-      localStorage.setItem("token", jsonData.token);
-      localStorage.setItem("role", jsonData.result.role);
-      localStorage.setItem("user", JSON.stringify(jsonData.result));
+      await AsyncStorage.setItem("token", jsonData.token);
       return jsonData;
     } else {
       console.log(jsonData);
@@ -102,28 +119,7 @@ export const loginPatient = async (email, password) => {
   console.log(password);
   const url = `${BASE_URL}/user/login`;
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(response.status);
-    const jsonData = await response.json();
-    console.log("login data");
-    console.log(jsonData);
-    if (response.status === 200) {
-      await AsyncStorage.setItem("token", jsonData.token);
-
-      console.log("tada");
-      return jsonData;
-    } else {
-      throw Error(jsonData.message);
-    }
+    c;
   } catch (e) {
     throw Error(e.message);
   }

@@ -19,6 +19,11 @@ import DoctorDetails from "./components/Doctor_Details/Doctor_Details";
 import Packages from "./components/Home/Home/Packages";
 import MedicalReport from "./components/Appointment/medical_report";
 import Dropdown from "./components/Appointment/Dropdown";
+import BecomeDoctor from "./components/Become_Doctor/become_doctor";
+import pin from "./components/SignUp/pin";
+import EmailScreen from "./components/SignUp/email";
+import PackageDetails from "./components/Home/Home/PackageDetails";
+import List from "./components/Home/Home/List";
 
 const Stack = createStackNavigator();
 
@@ -50,6 +55,11 @@ export default function App() {
         <Stack.Screen name="Packages" component={Packages} />
         <Stack.Screen name="Report" component={MedicalReport} />
         <Stack.Screen name="Dropdown" component={Dropdown} />
+        <Stack.Screen name="BecomeDoctor" component={BecomeDoctor} />
+        <Stack.Screen name="email" component={EmailScreen} />
+        <Stack.Screen name="pin" component={pin} />
+        <Stack.Screen name="PackageDetails" component={PackageDetails} />
+        <Stack.Screen name="List" component={List} />
       </Stack.Navigator>
     </NavigationContainer>
   );

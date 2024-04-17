@@ -19,30 +19,9 @@ import { style } from "../../Style/style";
 import FetchDoctor from "./Fetch";
 import List from "./List";
 import Packages from "./Packages";
+import { BASE_URL } from "../../../actions/action-creators/config";
 
 const Home = () => {
-  const data = [
-    { id: "1", title: "Cardio", doctors: 12, icon: faHeart, color: "#a366ff" },
-    {
-      id: "2",
-      title: "Dental",
-      doctors: 8,
-      icon: faBell,
-      color: "#3399ff",
-    },
-    {
-      id: "3",
-      title: "Neurologist",
-      doctors: 8,
-      icon: faBell,
-      color: "#ffb380",
-    },
-  ];
-
-  const renderSeparator = () => <View style={{ width: 20 }} />;
-  const containerColors = ["#e0ccff", "#b3d9ff", "#ffb380"];
-  const bellIconContainers = ["#d1b3ff", "#66b3ff", "#ff8533"];
-
   //
 
   return (
@@ -84,16 +63,16 @@ const Home = () => {
               <Text style={styles.sectionTitle}>Let's find</Text>
               <Text style={styles.sectionTitle}>your suitable doctor</Text>
             </View>
-            <View className="w-full flex">
+            <View className="w-full flex ">
               <List />
             </View>
           </View>
           {/* 3rd Container */}
-          <View className="mt-2 pt-6  bg-blue-200  rounded-2xl ">
+          <View className="mt-2 p  bg-blue-200  rounded-2xl ">
             <View className="pl-2 flex-row justify-between">
               <Text
-                style={{ fontFamily: "Poppins-Semibold" }}
-                className="text-2xl "
+                style={{ fontFamily: "Poppins-Regular" }}
+                className="text-xl "
               >
                 Top Doctors
               </Text>

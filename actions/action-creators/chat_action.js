@@ -1,4 +1,4 @@
-import { db } from "../firebase";
+// import { db } from "../firebase";
 
 export const sendTextMessage = async (userId, doctorId, patientId, message) => {
   let sentTo, sentBy;

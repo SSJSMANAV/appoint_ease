@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { fetchDoctorsList } from "../../../actions/doctor-action";
 import { FlatList } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
 import { useFonts } from "expo-font";
+import { BASE_URL } from "../../../actions/action-creators/config";
+import { useNavigation } from "@react-navigation/native";
 
 const FetchDoctor = () => {
   const [doctorData, setDoctorData] = useState([]);
 
-  let [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("../../../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Semibold": require("../../../assets/fonts/Poppins-SemiBold.ttf"),
-  });
+  const navigation = useNavigation();
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
+  const navigateToDoctor = (doctor) => {
+    navigation.navigate("DoctorDetails", { data: doctor });
+  };
   useEffect(() => {
     async function loadData() {
       try {
@@ -33,10 +31,15 @@ const FetchDoctor = () => {
   }, []);
 
   const renderDoctorItem = ({ item }) => (
-    <View style={styles.itemContainer}>
+    <TouchableOpacity
+      onPress={() => {
+        navigateToDoctor(item);
+      }}
+      style={styles.itemContainer}
+    >
       <View style={styles.doctorImageContainer}>
         <Image
-          source={require("../../../images/doctor.png")}
+          source={{ uri: `${BASE_URL}/assets/${item.image}` }}
           style={styles.doctorImageList}
         />
       </View>
@@ -55,7 +58,7 @@ const FetchDoctor = () => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

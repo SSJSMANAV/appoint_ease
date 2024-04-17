@@ -16,7 +16,7 @@ import {
   faSmileWink,
   faHouse,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 // import { DocumentPicker } from "react-native-document-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { registerPatient } from "../../actions/action-creators/auth_action";
@@ -25,10 +25,10 @@ import { Formik } from "formik";
 const SignUp = () => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState("");
 
-  // const createUser = async (values) => {
-  //   await registerPatient({ ...values, image: image });
-  // };
+  const route = useRoute();
+  const { email } = route.params;
 
   const selectImage = async () => {
     try {
@@ -39,8 +39,8 @@ const SignUp = () => {
       if (!result.canceled) {
         // Document picked successfully
         console.log(result.canceled); //false
-        console.log("Document picked:", result.assets[0].uri);
-        setImage(result.assets[0].uri);
+        console.log("Document picked:", result.assets[0]);
+        setImage(result.assets[0]);
         // Display the picked image
       } else {
         // User cancelled the upload
@@ -68,20 +68,30 @@ const SignUp = () => {
         {/* Main */}
         <Formik
           initialValues={{
-            email: "",
+            email: email,
             username: "",
+            dateOfBirth: "",
             address: "",
             phoneNumber: "",
             password: "",
             image: null,
           }}
           onSubmit={async (values) => {
-            console.log(values);
+            console.log("idhar aaya");
             await registerPatient({
               ...values,
               imageFile: image,
               dob: new Date(),
-            });
+            })
+              .then(() => {
+                console.log("created");
+                // navigare to home page
+              })
+              .catch((e) => {
+                // toast (something went wrong)
+                console.log(e.toString());
+                console.log("something went wrong.");
+              });
           }}
         >
           {({ handleChange, handleSubmit, values }) => (
@@ -96,22 +106,33 @@ const SignUp = () => {
                   <View className="gap-y-2 ">
                     <View className=" items-center ">
                       <TextInput
-                        placeholder="Email"
+                        // placeholder="Email"
                         placeholderTextColor="grey"
                         onChangeText={handleChange("email")}
-                        value={values.email}
-                        className=" text-black bg-slate-100 px-5 py-2 rounded-md shadow-xl shadow-slate-500 w-10/12 "
+                        value={email}
+                        editable={false}
+                        className=" text-black bg-slate-100 px-5 py-2 rounded-md shadow-xl shadow-slate-500 w-10/12 text-slate-600 "
                       />
                     </View>
                   </View>
                   <View className="gap-y-2 ">
-                    <View className=""></View>
                     <View className=" items-center ">
                       <TextInput
                         placeholder="Username"
                         placeholderTextColor="grey"
                         onChangeText={handleChange("username")}
                         value={values.username}
+                        className=" text-black bg-slate-100 px-5 py-2 rounded-md shadow-xl shadow-slate-500 w-10/12 "
+                      />
+                    </View>
+                  </View>
+                  <View className="gap-y-2 ">
+                    <View className=" items-center ">
+                      <TextInput
+                        placeholder="Date Of Birth"
+                        placeholderTextColor="grey"
+                        onChangeText={handleChange("username")}
+                        value={values.dateOfBirth}
                         className=" text-black bg-slate-100 px-5 py-2 rounded-md shadow-xl shadow-slate-500 w-10/12 "
                       />
                     </View>

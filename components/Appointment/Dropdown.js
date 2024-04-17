@@ -8,12 +8,26 @@ import { StyleSheet } from "react-native";
 const data = [
   { label: "All", value: "All" },
   { label: "Pending", value: "Pending" },
-  { label: "Completed", value: "Completed" },
+  { label: "Completed", value: "completed" },
 ];
 
 const Dropdown = (props) => {
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState("All");
   const [isFocus, setIsFocus] = useState(false);
+
+  const handleChange = (item) => {
+    setValue(item.value);
+    setIsFocus(false);
+
+    if (item.value === "All") {
+      props.changeStatus(null);
+      console.log(item.value); // Pass null to fetch all appointments
+    } else {
+      props.changeStatus(item.value);
+      console.log(item.value); // Pass the selected status to filter appointments
+    }
+  };
+
   return (
     <View>
       <DropdownElement
@@ -32,10 +46,7 @@ const Dropdown = (props) => {
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onChange={(item) => {
-          setValue(item.value);
-          setIsFocus(false);
-        }}
+        onChange={handleChange}
         renderLeftIcon={() => (
           <AntDesign
             style={styles.icon}

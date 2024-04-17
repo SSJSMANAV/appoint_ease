@@ -15,15 +15,25 @@ import Dropdown from "./Dropdown";
 const Appointments = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [theAppointmentsList, setAppointmentsList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
   const navigation = useNavigation();
 
   const changeStatus = (status) => {
-    console.log("yeta list ko length yeti cha " + theAppointmentsList.length);
-    let filteredList = theAppointmentsList.filter(
-      (appointment) => appointment.status === status
-    );
-    console.log(filteredList.length);
-    setAppointmentsList(filteredList);
+    let filteredList;
+
+    if (status === "All" || !status) {
+      // If "All" is selected, or if status is null, show all appointments
+      filteredList = theAppointmentsList;
+      console.log(theAppointmentsList);
+    } else {
+      // Otherwise, filter appointments by the selected status
+      filteredList = theAppointmentsList.filter(
+        (appointment) => appointment.status === status
+      );
+      console.log(filteredList);
+    }
+    // Update appointmentsList with the filtered list
+    setFilteredList(filteredList);
   };
 
   const fetchAppointments = async () => {
@@ -32,7 +42,7 @@ const Appointments = () => {
       .then((data) => {
         console.log(data.result);
         setAppointmentsList(data.result);
-        setIsLoading(false);
+        setFilteredList(data.result);
       })
       .catch((e) => {
         setIsLoading(false);
@@ -42,6 +52,10 @@ const Appointments = () => {
   useEffect(() => {
     fetchAppointments();
   }, []);
+
+  const medicalHistory = (item) => {
+    navigation.navigate("Report", { appointment: item });
+  };
 
   const renderItem = ({ item }) => (
     <View>
@@ -58,8 +72,13 @@ const Appointments = () => {
               <Text style={styles.buttonText}>No Actions</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={[styles.button, styles.completedButton]}>
-              <Text style={styles.buttonText}>View Report</Text>
+            <TouchableOpacity
+              style={[styles.button, styles.completedButton]}
+              onPress={() => {
+                medicalHistory(item);
+              }}
+            >
+              <Text style={styles.completedButtonText}>View Report</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -84,12 +103,12 @@ const Appointments = () => {
   return (
     <View style={styles.container}>
       <View>
-        <Dropdown />
+        <Dropdown changeStatus={changeStatus} />
       </View>
       <View className="items-center">
         <FlatList
           ListHeaderComponent={renderHeader}
-          data={theAppointmentsList}
+          data={filteredList}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           width={"95%"}
@@ -104,6 +123,7 @@ const Appointments = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 24,
   },
   row: {
     flexDirection: "row",
@@ -111,7 +131,6 @@ const styles = StyleSheet.create({
     borderColor: "white",
     marginTop: 2,
     paddingVertical: 8,
-    backgroundColor: "#abe4d3",
   },
   cell: {
     flex: 1,
@@ -129,16 +148,15 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   pendingButton: {
-    backgroundColor: "red",
-    borderColor: "red",
+    backgroundColor: "grey",
+    // borderColor: "red",
   },
   completedButton: {
-    backgroundColor: "green",
-    borderColor: "green",
+    // backgroundColor: "green",
+    borderColor: "grey",
   },
   buttonText: {
     alignSelf: "center",
-    color: "white",
 
     fontFamily: "Poppins-Regular",
   },
@@ -159,6 +177,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     fontFamily: "Poppins-Semibold",
     fontSize: 16,
+  },
+  completedButtonText: {
+    alignSelf: "center",
+    fontSize: 14,
+    fontFamily: "Poppins-Regular",
+    fontWeight: "600",
+    color: "green",
   },
 });
 

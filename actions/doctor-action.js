@@ -7,15 +7,15 @@ export const fetchDoctorsList = async (speciality) => {
       method: "GET",
     });
 
-    console.log("no data in name");
     console.log(response.status);
-    console.log("no data in name");
     const jsonData = await response.json();
 
     if (!jsonData.result) {
       throw new Error("No data found.");
     } else {
+      console.log("yeta");
       console.log(jsonData);
+      console.log("yeta");
       return jsonData;
     }
   } catch (error) {

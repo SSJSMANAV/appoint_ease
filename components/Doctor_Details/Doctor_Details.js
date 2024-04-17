@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, Button } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { useRoute } from "@react-navigation/native";
@@ -10,6 +10,9 @@ import * as Animatable from "react-native-animatable";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { BASE_URL } from "../../actions/action-creators/config";
+import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import { bookmarkTheDoctor } from "../../actions/action-creators/chat_action";
 
 const DoctorDetails = () => {
   let [fontsLoaded] = useFonts({
@@ -49,7 +52,7 @@ const DoctorDetails = () => {
         >
           <View>
             <Image
-              source={require("../../images/doctor.png")}
+              source={{ uri: `${BASE_URL}/assets/${data.image}` }}
               className="w-28 h-28 rounded-2xl "
             />
           </View>
@@ -69,6 +72,21 @@ const DoctorDetails = () => {
               ))}
             </View>
           </View>
+          <Button
+            onPress={async () => {
+              await bookmarkTheDoctor(doctorId, doctorData, user)
+                .then(() => {
+                  toast.success(
+                    `Dr. ${doctorData.username} has been bookmarked.`
+                  );
+                  setIsBookmarked(true);
+                })
+                .catch((e) => {
+                  toast.error(e.message);
+                });
+            }}
+            title="Bookmark"
+          />
         </Animatable.View>
         <View className="flex-row justify-between mt-10 w-full gap-x-3">
           <TouchableOpacity

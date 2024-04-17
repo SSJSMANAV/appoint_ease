@@ -8,31 +8,36 @@ import {
   StyleSheet,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
-import { FlatList } from "react-native-gesture-handler";
-import { fetchDoctorsList } from "../../../actions/doctor-action";
-
-const RenderItem = ({ item, index }) => {
-  const containerColors = ["#e0ccff", "#b3d9ff", "#ffb380"];
+import { BASE_URL } from "../../../actions/action-creators/config";
+import { useNavigation, useRoute } from "@react-navigation/native";
+const RenderItem = ({
+  item,
+  index,
+  onPress,
+  doctorsLength,
+  icon,
+  color,
+  containerColors,
+  image,
+  doctorList,
+}) => {
   const bellIconContainers = ["#d1b3ff", "#66b3ff", "#ff8533"];
 
-  // const [slkd, lsdkfj] = useState("");
-  // useEffect(() => {
-  //   const fetchDoctorBySpeciality = async () => {
-  //       await fetchDoctorsList(item.title);
-  //   }
+  const navigation = useNavigation();
+  console.log("yeta doctor list");
+  console.log("DoctorList", doctorList);
 
-  //   fetchDoctorBySpeciality();
-  // }, []);
   return (
     <View
       style={[styles.container, { backgroundColor: containerColors[index] }]}
-      className="w-4/6"
+      className="w-4/6 "
     >
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Search", { theCategory: item.title });
+        }}
+      >
         <View className="ml-4 pr-6 gap-y-5">
           <View>
             <View
@@ -41,34 +46,25 @@ const RenderItem = ({ item, index }) => {
                 { backgroundColor: bellIconContainers[index] },
               ]}
             >
-              <FontAwesomeIcon icon={item.icon} size={22} color={item.color} />
+              <FontAwesomeIcon icon={icon} size={22} color={color[index]} />
             </View>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.doctorsText}>{item.doctors} doctors</Text>
+              <Text style={styles.doctorsText}>
+                {doctorsLength > 1
+                  ? `${doctorsLength} doctors`
+                  : `${doctorsLength} doctor`}
+              </Text>
             </View>
           </View>
           <View style={styles.imageContainer}>
-            {[1, 2, 3, 4].map((index) => (
+            {doctorList.map((doctor, index) => (
               <Image
                 key={index}
-                source={require("../../../images/doctor.png")}
+                source={{ uri: `${BASE_URL}/assets/${doctor.image}` }}
                 style={styles.doctorImage}
               />
             ))}
-            <Text
-              className=" bg-blue-100 rounded-full ml-[-12] text-lg "
-              style={{
-                paddingTop: 4,
-                paddingHorizontal: 5,
-                fontSize: 15,
-                borderWidth: 2,
-                borderColor: "#fff",
-                fontFamily: "Poppins-Regular",
-              }}
-            >
-              +9
-            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -85,7 +81,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 20,
     alignSelf: "center",
-
+    backgroundColor: "black",
     paddingLeft: 6,
   },
   bellIconContainer: {

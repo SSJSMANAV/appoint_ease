@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { View, Text, StyleSheet, Image } from "react-native";
-import {
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native-gesture-handler";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { FlatList, TextInput, ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -16,17 +11,13 @@ import { useFonts } from "expo-font";
 import { useDispatch } from "react-redux";
 import { fetchDoctorsByName } from "../../actions/action-creators/doctors_list_action";
 import { useNavigation } from "@react-navigation/native";
-// import DoctorDetails from "../Doctor_Details/Doctor_Details";
+import { BASE_URL } from "../../actions/action-creators/config";
+import { useRoute } from "@react-navigation/native";
 
 const Search = () => {
-  let [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Semibold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
+  const route = useRoute();
+  const { theCategory } = route.params;
+  console.log("idhar hey : " + theCategory);
 
   const navigation = useNavigation();
 
@@ -34,7 +25,7 @@ const Search = () => {
     navigation.navigate("DoctorDetails", { data: doctor });
   };
 
-  const [selectedCategory, setSelectedCategory] = useState("All"); // Updated initial state
+  const [selectedCategory, setSelectedCategory] = useState(theCategory); // Updated initial state
   const [doctorData, setDoctorData] = useState([]);
   //
   const [doctorName, setDoctorName] = useState("");
@@ -137,7 +128,8 @@ const Search = () => {
     >
       <View style={styles.doctorImageContainer}>
         <Image
-          source={require("../../images/doctor.png")}
+          source={{ uri: `${BASE_URL}/assets/${item.image}` }}
+          alt="image"
           style={styles.doctorImage}
         />
       </View>

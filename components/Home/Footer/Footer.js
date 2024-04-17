@@ -22,7 +22,7 @@ const Footer = () => {
   };
 
   const navigateToSearch = () => {
-    navigation.navigate("Search");
+    navigation.navigate("Search", { theCategory: "All" });
   };
   const navigateToAppointments = () => {
     navigation.navigate("Appointments");
