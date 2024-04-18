@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Image, Text, StyleSheet, Button } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
@@ -10,11 +10,13 @@ import * as Animatable from "react-native-animatable";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { BASE_URL } from "../../actions/action-creators/config";
+import { BASE_URL, userContainer } from "../../actions/action-creators/config";
 import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
-import { bookmarkTheDoctor } from "../../actions/action-creators/chat_action";
+import { bookmarkTheDoctor, unBookmarkTheDoctor } from "../../actions/action-creators/chat_action";
+import { db } from "../../firebaseConfig";
 
 const DoctorDetails = () => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   let [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Semibold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
@@ -41,6 +43,54 @@ const DoctorDetails = () => {
   const { data } = route.params;
 
   console.log(data);
+
+  const bookmarkDoctor = async () => {
+    if (!isBookmarked) {
+      await bookmarkTheDoctor(data.doctorId, data, userContainer.user)
+        .then(() => {
+          console.log('doctor bookmarked');
+          // toast.success(`Dr. ${doctorData.username} has been bookmarked.`);
+          setIsBookmarked(true);
+        })
+        .catch((e) => {
+          // toast
+          console.log(e.toString() + ' ....slkd');
+        });
+    } else {
+      await unBookmarkTheDoctor(data.doctorId, data, userContainer.user)
+        .then(() => {
+          console.log('doctor removed from bookmarks');
+          // toast.success(
+          //   `Dr. ${doctorData.username} has been removed from your bookmarks.`
+          // );
+          setIsBookmarked(false);
+        })
+        .catch((e) => {
+          console.log(e.toString() + ' ....slkd');
+          // toast.error(e.message);
+        });
+    }
+  };
+
+  useEffect(() => {
+    const getBookmarked = async () => {
+      let users = [];
+
+      const collectionRef = await db
+        .collection(`patients/${userContainer.user._id}/followings`)
+        .where("doctorId", "==", data.doctorId);
+      const snapshot = await collectionRef.get();
+
+      users = snapshot.docs.map((doc) => doc.data());
+      if (users.length === 0) {
+        setIsBookmarked(false);
+      } else {
+        setIsBookmarked(true);
+      }
+    };
+
+    getBookmarked();
+  }, []);
 
   return (
     <View className="flex-1 items-center bg-white">
@@ -72,21 +122,14 @@ const DoctorDetails = () => {
               ))}
             </View>
           </View>
-          <Button
-            onPress={async () => {
-              await bookmarkTheDoctor(doctorId, doctorData, user)
-                .then(() => {
-                  toast.success(
-                    `Dr. ${doctorData.username} has been bookmarked.`
-                  );
-                  setIsBookmarked(true);
-                })
-                .catch((e) => {
-                  toast.error(e.message);
-                });
-            }}
+          {!isBookmarked && <Button
+            onPress={bookmarkDoctor}
             title="Bookmark"
-          />
+          />}
+          {isBookmarked && <Button
+            onPress={bookmarkDoctor}
+            title="Remove"
+          />}
         </Animatable.View>
         <View className="flex-row justify-between mt-10 w-full gap-x-3">
           <TouchableOpacity

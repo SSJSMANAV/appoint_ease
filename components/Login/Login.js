@@ -23,8 +23,6 @@ const Login = () => {
     navigation.navigate("SignUp");
   };
 
-  
-
   const navigateToHome = async () => {
     await loginPatient(email, password)
       .then((data) => {

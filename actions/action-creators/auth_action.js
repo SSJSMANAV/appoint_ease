@@ -1,7 +1,7 @@
 // import { authSliceActions } from "../slices/auth_slice";
 // import currentUser from "../constants";
 // Your code files
-import { BASE_URL } from "./config";
+import { BASE_URL, tokenContainer, userContainer } from "./config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import mime from "mime";
 
@@ -119,7 +119,32 @@ export const loginPatient = async (email, password) => {
   console.log(password);
   const url = `${BASE_URL}/user/login`;
   try {
-    c;
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response.status);
+    const jsonData = await response.json();
+    console.log("login data");
+    console.log(jsonData);
+    if (response.status === 200) {
+      await AsyncStorage.setItem("token", jsonData.token).then(() => {
+        tokenContainer.token = jsonData.token;
+      });
+      await AsyncStorage.setItem("user", JSON.stringify(jsonData)).then(() => {
+        userContainer.user = jsonData.user;
+      });
+      console.log("tada");
+      return jsonData;
+    } else {
+      throw Error(jsonData.message);
+    }
   } catch (e) {
     throw Error(e.message);
   }

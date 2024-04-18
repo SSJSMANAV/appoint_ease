@@ -1,4 +1,4 @@
-// import { db } from "../firebase";
+import { db } from "../../firebaseConfig";
 
 export const sendTextMessage = async (userId, doctorId, patientId, message) => {
   let sentTo, sentBy;
@@ -72,6 +72,9 @@ export const fetchLastChatMessage = (doctorId, patientId, onUpdate) => {
 };
 
 export const bookmarkTheDoctor = async (doctorId, doctor, user) => {
+  console.log(doctorId);
+  console.log(doctor);
+  console.log(user);
   const currentTimeInMilliseconds = new Date().getTime();
   try {
     await db
