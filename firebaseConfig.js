@@ -1,17 +1,8 @@
-import { initializeApp } from "firebase/app";
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-import "firebase/storage";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/storage";
 
-// Optionally import the services that you want to use
-// import {...} from "firebase/auth";
-// import {...} from "firebase/database";
-// import {...} from "firebase/firestore";
-// import {...} from "firebase/functions";
-// import {...} from "firebase/storage";
-
-// Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBVfhmKS7xY2b2PRc7mIqsE-wK9yM6d0xQ",
   authDomain: "my-portfolio-4f616.firebaseapp.com",
@@ -22,12 +13,12 @@ const firebaseConfig = {
   measurementId: "G-YZ534DD1EH",
 };
 
-const app = initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Use this to initialize the firebase App
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+// Use these for db & auth
+const db = firebaseApp.firestore();
 const auth = firebase.auth();
 const storage = firebase.storage();
 
-export { db, auth, storage };
-
-// For more information on how to access Firebase in your project,
-// see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
+export { auth, db, storage };
