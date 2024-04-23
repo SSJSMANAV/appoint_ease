@@ -39,8 +39,8 @@ export const subscribeToChat = (doctorId, patientId, limit, onUpdate) => {
   try {
     const collectionRef = db
       .collection(`chats/${doctorId + patientId}/messages`)
-      .orderBy("createdAt", "desc")
-      .limit(limit);
+      .orderBy("createdAt", "desc");
+    // .limit(limit);
     const unsubscribe = collectionRef.onSnapshot((snapshot) => {
       const messages = snapshot.docs.map((doc) => doc.data());
       onUpdate(messages);
@@ -128,6 +128,8 @@ export const unBookmarkTheDoctor = async (doctorId, doctor, user) => {
 
 export const fetchTheChatUsers = async (role, userId) => {
   console.log("fetch the users");
+  console.log(userId);
+  console.log(role);
   let users = [];
 
   try {
@@ -137,6 +139,7 @@ export const fetchTheChatUsers = async (role, userId) => {
 
       users = snapshot.docs.map((doc) => doc.data());
       console.log(users);
+
       return users;
     } else {
       const collectionRef = await db.collection(

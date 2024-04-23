@@ -20,15 +20,17 @@ const Login = () => {
   const navigation = useNavigation();
 
   const navigateToSignUp = () => {
-    navigation.navigate("SignUp");
+    navigation.navigate("email");
   };
 
   const navigateToHome = async () => {
     await loginPatient(email, password)
       .then((data) => {
+        // console.log("thik");
         navigation.navigate("Home");
       })
       .catch((e) => {
+        console.log("bethik");
         alert(e.message);
       });
   };

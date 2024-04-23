@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ToastAndroid,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
   BASE_URL,
@@ -9,7 +16,9 @@ import { useNavigation } from "@react-navigation/native";
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
+  const [seeAll, setSeeAll] = useState(false); // State to control whether to display all packages
   const navigation = useNavigation();
+  const flatListRef = useRef(null);
 
   const viewPackage = (item) => {
     navigation.navigate("PackageDetails", { packages: item });
@@ -35,6 +44,14 @@ const Packages = () => {
     fetchPackages();
   }, []);
 
+  const scrollToOffset = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({ offset: 20 });
+    }
+  };
+
+  const buttonPackages = seeAll ? packages : packages.slice(0, 2);
+
   const renderPackage = ({ item }) => {
     const bookPackage = async () => {
       const url = `${BASE_URL}/package/buy-package/${item._id}`;
@@ -55,18 +72,15 @@ const Packages = () => {
         console.log("package book data");
         console.log(jsonData);
         if (response.status === 200) {
-          // toast
-
-          console.log("tada");
-          return jsonData;
+          ToastAndroid.show("Doctor Bookmarked", ToastAndroid.SHORT);
         } else {
-          console.log("errrrrrrr");
-          throw Error(jsonData.message);
+          ToastAndroid.show(jsonData.message, ToastAndroid.SHORT);
         }
       } catch (e) {
         console.log("error hey: " + e.toString());
       }
     };
+
     return (
       <TouchableOpacity
         style={styles.packageContainer}
@@ -98,10 +112,26 @@ const Packages = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text className="font-poppins text-lg">Health Packages</Text>
+        <View>
+          <Text className="font-poppins text-lg">Health Packages</Text>
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              setSeeAll(!seeAll);
+              scrollToOffset();
+            }}
+          >
+            <Text className="font-poppins text-md text-slate-500">
+              {seeAll ? "See Less" : "See All"}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
       <FlatList
-        data={packages}
+        ref={flatListRef}
+        data={buttonPackages}
         keyExtractor={(item) => item.id}
         renderItem={renderPackage}
         contentContainerStyle={styles.flatListContent}
@@ -122,6 +152,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     padding: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
   },
   packageContainer: {
     flexDirection: "row",

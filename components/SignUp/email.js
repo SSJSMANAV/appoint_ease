@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BASE_URL } from "../../actions/action-creators/config";
+
 const EmailScreen = () => {
   const navigation = useNavigation();
 
@@ -41,7 +42,7 @@ const EmailScreen = () => {
       console.log(jsonData);
       if (response.status === 200) {
         console.log("all good");
-        navigation.navigate("pin", { email: email });
+        navigation.navigate("Pin", { email: email });
       } else {
         console.log("idhar lafada");
         // ToastAndroid.show(jsonData.message);

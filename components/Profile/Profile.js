@@ -11,6 +11,9 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Footer from "../Home/Footer/Footer";
 import { useFonts } from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+import { BASE_URL, userContainer } from "../../actions/action-creators/config";
 
 const Profile = () => {
   let [fontsLoaded] = useFonts({
@@ -20,28 +23,37 @@ const Profile = () => {
     "Roboto-Bold": require("../../assets/fonts/Roboto-Bold.ttf"),
   });
 
+  const navigation = useNavigation();
   return (
     <View className="flex-1 bg-blue-100 ">
       <View className="items-center pt-12 pb-4  ">
         <Image
-          source={require("../../images/doctor.png")}
+          source={{
+            uri: `${BASE_URL}/assets/${userContainer.user.image}`,
+          }}
           className="rounded-full w-24 h-24 mb-10 "
         />
         <Text
-          className="font-semibold mb-2"
+          className="font-semibold "
           style={{ fontFamily: "Poppins-Semibold", fontSize: 22 }}
         >
-          Dr. Tesha Shree Shrestha
+          {userContainer.user.name}
         </Text>
         <Text
           className=" text-slate-400"
           style={{ fontFamily: "Poppins-Regular", fontSize: 16 }}
         >
-          Doctor at Harvard University
+          {userContainer.user.address}
+        </Text>
+        <Text
+          className=" text-slate-400"
+          style={{ fontFamily: "Poppins-Regular", fontSize: 16 }}
+        >
+          {userContainer.user.email}
         </Text>
       </View>
       <View className="gap-y-6 pt-4  ">
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <View className="justify-center flex-row items-center   gap-y-6  ">
             <View className="w-10/12">
               <Text className="text-lg font-semibold" style={styles.heading}>
@@ -62,9 +74,9 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <View className="justify-center flex-row items-center   ">
             <View className="w-10/12">
               <Text className="text-lg font-semibold" style={styles.heading}>
@@ -85,8 +97,8 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
+        </TouchableOpacity> */}
+        {/* <TouchableOpacity>
           <View className="justify-center flex-row items-center   ">
             <View className="w-10/12">
               <Text className="text-lg font-semibold" style={styles.heading}>
@@ -107,8 +119,25 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
           </View>
+        </TouchableOpacity> */}
+        <TouchableOpacity
+          onPress={async () => {
+            navigation.navigate("MyPackages");
+          }}
+        >
+          <Text> My Packages</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={async () => {
+            await AsyncStorage.clear();
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0, // Reset to the first screen in the stack
+                routes: [{ name: "Login" }], // Navigate to the Login screen
+              })
+            );
+          }}
+        >
           <View className="justify-center flex-row items-center   ">
             <View className="w-10/12">
               <Text className="text-lg  font-semibold" style={styles.heading}>

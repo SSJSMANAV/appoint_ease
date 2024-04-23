@@ -17,8 +17,6 @@ const FrontPage = () => {
 
   const [token, setToken] = useState("");
 
-  const [user, setUser] = useState();
-
   const fetchToken = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
@@ -43,11 +41,14 @@ const FrontPage = () => {
     try {
       const user = await AsyncStorage.getItem("user");
       if (user !== null) {
+        console.log("yeh ha ");
+        console.log(user);
         const theUser = JSON.parse(user);
-        console.log(theUser._id);
-        console.log("user " + JSON.parse(user));
-        setUser(user);
-        userContainer.user = JSON.parse(user);
+        console.log("yeh ");
+        console.log(theUser);
+        console.log("yeh ");
+
+        userContainer.user = theUser;
         // Token exists in AsyncStorage
       } else {
         // Token doesn't exist

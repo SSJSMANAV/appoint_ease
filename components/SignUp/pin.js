@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { BASE_URL } from "../../actions/action-creators/config";
 
-const pin = () => {
+const Pin = () => {
   const [pin, setPin] = useState("");
   const navigation = useNavigation();
 
@@ -75,4 +75,4 @@ const pin = () => {
   );
 };
 
-export default pin;
+export default Pin;

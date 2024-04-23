@@ -65,13 +65,13 @@ const FetchDoctor = () => {
     <View>
       {doctorData.length > 0 && (
         <FlatList
-          data={doctorData}
-          keyExtractor={(item) => item.id}
+          data={doctorData.slice(0, 3)} // Slice the data array to only include the first 3 items
+          initialNumToRender={3} // Render only 3 items initially
+          maxToRenderPerBatch={3} // Render maximum 3 items per batch
+          keyExtractor={(item) => item.id} // Ensure id is converted to string
           renderItem={renderDoctorItem}
           horizontal={true}
           snapToInterval={350}
-          // className="flex-col"
-          // showsHorizontalScrollIndicator={false}
         />
       )}
       {doctorData.length === 0 && <Text>No data available</Text>}

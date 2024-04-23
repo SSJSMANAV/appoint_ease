@@ -16,6 +16,7 @@ import {
   faSmileWink,
   faHouse,
 } from "@fortawesome/free-solid-svg-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation, useRoute } from "@react-navigation/native";
 // import { DocumentPicker } from "react-native-document-picker";
 import * as DocumentPicker from "expo-document-picker";
@@ -24,8 +25,14 @@ import { Formik } from "formik";
 
 const SignUp = () => {
   const navigation = useNavigation();
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false); // Hide the date picker after date selection
+    setDateOfBirth(selectedDate || dateOfBirth);
+  };
+
   const [image, setImage] = useState(null);
-  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState(new Date());
 
   const route = useRoute();
   const { email } = route.params;
@@ -84,7 +91,7 @@ const SignUp = () => {
               dob: new Date(),
             })
               .then(() => {
-                console.log("created");
+                navigation.navigate("Home");
                 // navigare to home page
               })
               .catch((e) => {
@@ -126,17 +133,33 @@ const SignUp = () => {
                       />
                     </View>
                   </View>
-                  <View className="gap-y-2 ">
+                  {/* <View className="gap-y-2 ">
                     <View className=" items-center ">
                       <TextInput
                         placeholder="Date Of Birth"
                         placeholderTextColor="grey"
-                        onChangeText={handleChange("username")}
+                        onChangeText={handleChange("dateOfBirth")}
                         value={values.dateOfBirth}
                         className=" text-black bg-slate-100 px-5 py-2 rounded-md shadow-xl shadow-slate-500 w-10/12 "
                       />
                     </View>
-                  </View>
+                  </View> */}
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => setShowDatePicker(true)} // Show date picker on button press
+                  >
+                    <Text style={styles.buttonText}>Select Date of Birth</Text>
+                  </TouchableOpacity>
+                  {showDatePicker && (
+                    <DateTimePicker
+                      value={dateOfBirth}
+                      mode="date"
+                      display="default"
+                      onChange={handleDateChange}
+                    />
+                  )}
+                  <Text> {dateOfBirth.toISOString().split("T")[0]} </Text>
+
                   <View className="gap-y-2 ">
                     <View className=" items-center ">
                       <TextInput
@@ -223,5 +246,49 @@ const SignUp = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    width: "80%",
+  },
+  logoContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  logo: {
+    width: 200,
+    height: 80,
+  },
+  form: {
+    width: "100%",
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  datePickerContainer: {
+    marginBottom: 10,
+  },
+  label: {
+    marginBottom: 5,
+  },
+  button: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+});
 
 export default SignUp;

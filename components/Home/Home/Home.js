@@ -8,21 +8,23 @@ import {
   StyleSheet,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
-import { FlatList } from "react-native-gesture-handler";
-import { useFonts } from "expo-font";
-import { RefreshControl } from "react-native";
-import { style } from "../../Style/style";
+
 import FetchDoctor from "./Fetch";
 import List from "./List";
 import Packages from "./Packages";
+import { useNavigation } from "@react-navigation/native";
+import { userContainer } from "../../../actions/action-creators/config";
 import { BASE_URL } from "../../../actions/action-creators/config";
 
 const Home = () => {
   //
+  const navigation = useNavigation();
+  const navigateToSearch = () => {
+    navigation.navigate("Search", { theCategory: "All" });
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -34,7 +36,9 @@ const Home = () => {
             <View className="  flex-row justify-between items-center">
               <View className=" flex-row items-center">
                 <Image
-                  source={require("../../../images/doctor.png")}
+                  source={{
+                    uri: `${BASE_URL}/assets/${userContainer.user.image}`,
+                  }}
                   className="w-14 h-14 rounded-full mr-4"
                 />
                 <View>
@@ -48,7 +52,7 @@ const Home = () => {
                     style={{ fontFamily: "Poppins-Semibold", fontSize: 16 }}
                     className="font-semibold "
                   >
-                    Manav
+                    {userContainer.user.name}
                   </Text>
                 </View>
               </View>
@@ -68,19 +72,24 @@ const Home = () => {
             </View>
           </View>
           {/* 3rd Container */}
-          <View className="mt-2 p  bg-blue-200  rounded-2xl ">
-            <View className="pl-2 flex-row justify-between">
-              <Text
-                style={{ fontFamily: "Poppins-Regular" }}
-                className="text-xl "
-              >
-                Top Doctors
-              </Text>
-              <View className=" justify-center mr-3">
-                <Text className="text-slate-500">See All</Text>
+          <View className="mt-2  bg-blue-200  rounded-2xl ">
+            <View className="flex-row justify-between" style={{ padding: 12 }}>
+              <View>
+                <Text
+                  style={{ fontFamily: "Poppins-Regular" }}
+                  className="text-xl "
+                >
+                  Top Doctors
+                </Text>
               </View>
+              <TouchableOpacity
+                className=" justify-center mr-3"
+                onPress={navigateToSearch}
+              >
+                <Text className="text-slate-500">See All</Text>
+              </TouchableOpacity>
             </View>
-            <View className="mt-4 bg-white">
+            <View className=" bg-white ">
               <View>
                 <FetchDoctor />
               </View>

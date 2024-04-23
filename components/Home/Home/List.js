@@ -55,9 +55,11 @@ const List = () => {
   // };
   return (
     <ScrollView horizontal>
-      {data.map((e, index) => {
-        return <Specialities data={e} index={index}></Specialities>;
-      })}
+      <View className="flex-row w-full pr-40">
+        {data.map((e, index) => {
+          return <Specialities data={e} index={index}></Specialities>;
+        })}
+      </View>
     </ScrollView>
   );
 };
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "space-between", // Optional: Adjust as needed
     marginTop: 10,
-    width: "50%",
+    width: "45%",
   },
   container: {
     flex: 1,

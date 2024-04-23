@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FlatList } from "react-native-gesture-handler";
+import StarRating from "react-native-star-rating";
 import {
   BASE_URL,
   tokenContainer,
@@ -59,7 +60,7 @@ const Rating = ({ doctorId }) => {
 
   const fetchReviews = async () => {
     try {
-      const url = `http://192.168.101.2:3009/feedback/${doctorId}`;
+      const url = `${BASE_URL}/feedback/${doctorId}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -71,7 +72,7 @@ const Rating = ({ doctorId }) => {
       const jsonData = await response.json();
       if (response.status === 200) {
         console.log(jsonData.result);
-        setReviews(jsonData.result);
+        setReviews(jsonData.result.reverse());
       } else {
         toast.error(jsonData.message);
         setReviews([]);
@@ -105,7 +106,7 @@ const Rating = ({ doctorId }) => {
   );
 
   const [comment, setComment] = useState("");
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     fetchReviews();
@@ -124,7 +125,16 @@ const Rating = ({ doctorId }) => {
         }}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={styles.modalView} className="gap-y-5">
+            <StarRating
+              disabled={false}
+              maxStars={5}
+              rating={rating}
+              selectedStar={(rating) => setRating(rating)}
+              fullStarColor={"gold"}
+              starSize={35}
+              animation="rotate"
+            />
             <TextInput
               value={comment}
               style={styles.modalText}
@@ -132,17 +142,19 @@ const Rating = ({ doctorId }) => {
                 setComment(value);
               }}
             />
-            <View className="flex-row justify-between w-4/5">
+            {/* Rating bar */}
+
+            <View className="flex-row justify-between w-9/12">
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
               >
-                <Text style={styles.textStyle}>Hide Modal</Text>
+                <Text style={styles.textStyle}>Cancel</Text>
               </Pressable>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => {
-                  handlePostRating();
+                  handlePostRating().then(setModalVisible(!modalVisible));
                   setComment("");
                   setRating(0);
                 }}

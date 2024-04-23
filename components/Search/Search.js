@@ -141,9 +141,9 @@ const Search = () => {
             {item.experience} years exp
           </Text>
         </View>
-        <Text style={{ fontFamily: "Poppins-Regular" }}>
+        {/* <Text style={{ fontFamily: "Poppins-Regular" }}>
           Rating: {item.rating}
-        </Text>
+        </Text> */}
       </View>
       <View>
         <Text style={styles.doctorPrice}>$100{item.price}</Text>
@@ -273,6 +273,7 @@ const styles = StyleSheet.create({
   doctorPrice: {
     fontSize: 16,
     fontFamily: "Poppins-Regular",
+    color: "grey",
   },
 });
 

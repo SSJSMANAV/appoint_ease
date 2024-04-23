@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, Text, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  Button,
+  ToastAndroid,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { useRoute } from "@react-navigation/native";
@@ -12,24 +19,20 @@ import { faBell, faHeart, faClock } from "@fortawesome/free-regular-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { BASE_URL, userContainer } from "../../actions/action-creators/config";
 import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
-import { bookmarkTheDoctor, unBookmarkTheDoctor } from "../../actions/action-creators/chat_action";
+import Icon from "react-native-vector-icons/Ionicons";
+import {
+  bookmarkTheDoctor,
+  unBookmarkTheDoctor,
+} from "../../actions/action-creators/chat_action";
 import { db } from "../../firebaseConfig";
 
 const DoctorDetails = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
-  let [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Semibold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
-  });
 
   const [activePage, setActivePage] = useState("About");
   const [borderAnimation, setBorderAnimation] = useState({
     translateX: 0, // Initial translation value
   });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   const handleTabClick = (page) => {
     setActivePage(page);
@@ -46,27 +49,34 @@ const DoctorDetails = () => {
 
   const bookmarkDoctor = async () => {
     if (!isBookmarked) {
+      setIsBookmarked(true);
       await bookmarkTheDoctor(data.doctorId, data, userContainer.user)
         .then(() => {
-          console.log('doctor bookmarked');
+          ToastAndroid.show("Doctor Bookmarked", ToastAndroid.SHORT);
+
+          console.log("doctor bookmarked");
           // toast.success(`Dr. ${doctorData.username} has been bookmarked.`);
-          setIsBookmarked(true);
         })
         .catch((e) => {
+          setIsBookmarked(false);
+          ToastAndroid.show("Error Occurred", ToastAndroid.SHORT);
+
           // toast
-          console.log(e.toString() + ' ....slkd');
+          console.log(e.toString() + " ....slkd");
         });
     } else {
+      setIsBookmarked(false);
       await unBookmarkTheDoctor(data.doctorId, data, userContainer.user)
         .then(() => {
-          console.log('doctor removed from bookmarks');
-          // toast.success(
-          //   `Dr. ${doctorData.username} has been removed from your bookmarks.`
-          // );
-          setIsBookmarked(false);
+          ToastAndroid.show(
+            "Doctor removed from Bookmarked",
+            ToastAndroid.SHORT
+          );
         })
         .catch((e) => {
-          console.log(e.toString() + ' ....slkd');
+          setIsBookmarked(true);
+          ToastAndroid.show("Error Occurred", ToastAndroid.LONG);
+          console.log(e.toString() + " ....slkd");
           // toast.error(e.message);
         });
     }
@@ -122,14 +132,16 @@ const DoctorDetails = () => {
               ))}
             </View>
           </View>
-          {!isBookmarked && <Button
-            onPress={bookmarkDoctor}
-            title="Bookmark"
-          />}
-          {isBookmarked && <Button
-            onPress={bookmarkDoctor}
-            title="Remove"
-          />}
+          {!isBookmarked && (
+            <TouchableOpacity onPress={bookmarkDoctor} className=" ">
+              <Icon name="bookmark-outline" size={30} color="black" />
+            </TouchableOpacity>
+          )}
+          {isBookmarked && (
+            <TouchableOpacity onPress={bookmarkDoctor} className=" ">
+              <Icon name="bookmark" size={30} color="#6600ff" />
+            </TouchableOpacity>
+          )}
         </Animatable.View>
         <View className="flex-row justify-between mt-10 w-full gap-x-3">
           <TouchableOpacity

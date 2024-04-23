@@ -22,8 +22,10 @@ const BookingDates = ({ doctorId, schedule, date, token }) => {
         </View>
       )}
       {schedule.length === 0 && (
-        <View>
-          <Text>NO APPOINTMENTS AVAILABLE ON {date.toDateString()}</Text>
+        <View className="mt-40 justify-center items-center">
+          <Text className="text-lg font-poppins text-blue-700">
+            NO APPOINTMENTS AVAILABLE
+          </Text>
         </View>
       )}
     </View>

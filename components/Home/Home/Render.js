@@ -31,7 +31,7 @@ const RenderItem = ({
   return (
     <View
       style={[styles.container, { backgroundColor: containerColors[index] }]}
-      className="w-4/6 "
+      className="w-4/6 mr-4"
     >
       <TouchableOpacity
         onPress={() => {

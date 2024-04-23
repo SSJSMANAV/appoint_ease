@@ -22,7 +22,7 @@ import mime from "mime";
 export const registerPatient = async (patient) => {
   const url = `${BASE_URL}/user/signup`;
 
-  const imageFile = new File([patient.imageFile], patient.imageFile.name);
+  // const imageFile = new File([patient.imageFile], patient.imageFile.name);
   const formData = new FormData();
 
   formData.append("name", patient.username);
@@ -49,7 +49,14 @@ export const registerPatient = async (patient) => {
     console.log(jsonData);
 
     if (response.status === 200) {
-      await AsyncStorage.setItem("token", jsonData.token);
+      await AsyncStorage.setItem("token", jsonData.token).then(() => {
+        tokenContainer.token = jsonData.token;
+      });
+      await AsyncStorage.setItem("user", JSON.stringify(jsonData.result)).then(
+        () => {
+          userContainer.user = jsonData.result;
+        }
+      );
       return jsonData;
     } else {
       console.log(jsonData);
@@ -102,6 +109,10 @@ export const registerDoctorRequest = async (doctorData, token) => {
     console.log(jsonData);
 
     if (response.status === 200) {
+      await AsyncStorage.setItem("token", jsonData.token).then(() => {
+        tokenContainer.token = jsonData.token;
+      });
+
       return jsonData.message;
     } else {
       console.log(jsonData.message);
@@ -134,14 +145,21 @@ export const loginPatient = async (email, password) => {
     console.log("login data");
     console.log(jsonData);
     if (response.status === 200) {
-      await AsyncStorage.setItem("token", jsonData.token).then(() => {
-        tokenContainer.token = jsonData.token;
-      });
-      await AsyncStorage.setItem("user", JSON.stringify(jsonData)).then(() => {
-        userContainer.user = jsonData.user;
-      });
-      console.log("tada");
-      return jsonData;
+      if (jsonData.user.role !== "patient") {
+        console.log("doctor bhai");
+        throw Error("Please login through web.");
+      } else {
+        await AsyncStorage.setItem("token", jsonData.token).then(() => {
+          tokenContainer.token = jsonData.token;
+        });
+        await AsyncStorage.setItem("user", JSON.stringify(jsonData.user)).then(
+          async () => {
+            userContainer.user = jsonData.user;
+          }
+        );
+        console.log("tada");
+        return jsonData;
+      }
     } else {
       throw Error(jsonData.message);
     }

@@ -24,6 +24,14 @@ import pin from "./components/SignUp/pin";
 import EmailScreen from "./components/SignUp/email";
 import PackageDetails from "./components/Home/Home/PackageDetails";
 import List from "./components/Home/Home/List";
+import ChatMessages from "./components/Inbox/chat_details";
+import Pin from "./components/SignUp/pin";
+import { LogBox } from "react-native";
+import MyPackages from "./components/MyPackages/my_packages";
+// import Video from "./components/Video/video_chat";
+// import VideoChat from "./components/Video/video";
+
+// Disable all log notifications
 
 const Stack = createStackNavigator();
 
@@ -36,6 +44,9 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
+  LogBox.ignoreAllLogs();
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Front">
@@ -57,9 +68,13 @@ export default function App() {
         <Stack.Screen name="Dropdown" component={Dropdown} />
         <Stack.Screen name="BecomeDoctor" component={BecomeDoctor} />
         <Stack.Screen name="email" component={EmailScreen} />
-        <Stack.Screen name="pin" component={pin} />
+        <Stack.Screen name="Pin" component={Pin} />
         <Stack.Screen name="PackageDetails" component={PackageDetails} />
         <Stack.Screen name="List" component={List} />
+        <Stack.Screen name="ChatMessage" component={ChatMessages} />
+        <Stack.Screen name="MyPackages" component={MyPackages} />
+        {/* <Stack.Screen name="Video" component={Video} /> */}
+        {/* <Stack.Screen name="VideoChat" component={VideoChat} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
