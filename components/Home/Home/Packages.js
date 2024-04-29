@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
-  const [seeAll, setSeeAll] = useState(false); // State to control whether to display all packages
+  const [seeAll, setSeeAll] = useState(false);
   const navigation = useNavigation();
   const flatListRef = useRef(null);
 

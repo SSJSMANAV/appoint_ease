@@ -64,7 +64,7 @@ const EmailScreen = () => {
         className="border-2 rounded-lg border-black"
       />
       <Button title="Submit" onPress={handleSubmit} />
-      <Text>Please fill in your email</Text>
+      <Text className="font-poppins">Please fill in your email</Text>
     </View>
   );
 };

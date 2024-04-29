@@ -30,7 +30,6 @@ const Login = () => {
         navigation.navigate("Home");
       })
       .catch((e) => {
-        console.log("bethik");
         alert(e.message);
       });
   };
@@ -82,16 +81,7 @@ const Login = () => {
               onChangeText={changePassword}
             />
           </View>
-          <View className="items-center">
-            <View className="mt-6   w-11/12">
-              <Text
-                className="ml-3 text-violet-700 underline"
-                onPress={forgotPassword}
-              >
-                Forgot Password
-              </Text>
-            </View>
-          </View>
+          <View className="items-center"></View>
           <View className="mt-6 items-center mb-12  ">
             <TouchableOpacity
               className=" bg-blue-600 items-center justify-center h-12 rounded-xl  w-4/5"
@@ -100,19 +90,10 @@ const Login = () => {
               <Text className="text-slate-100 font-bold text-lg">Log In</Text>
             </TouchableOpacity>
           </View>
-          <View className="items-center gap-y-3">
-            <Text className="text-slate-600">-Or sign In with-</Text>
 
-            <TouchableOpacity className=" shadow-2xl   shadow-black bg-slate-200  px-3 py-1 mt-2 ">
-              <Image
-                className="w-8 h-8  "
-                source={require("../../images/google.png")}
-              />
-            </TouchableOpacity>
-          </View>
           <View className="items-center mt-12">
             <TouchableOpacity>
-              <Text className="font-normal">
+              <Text className="font-poppins ">
                 Don't Have an account?
                 <Text className="text-blue-700" onPress={navigateToSignUp}>
                   Sign up

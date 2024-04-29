@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FlatList, TextInput, ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -17,7 +16,6 @@ import { useRoute } from "@react-navigation/native";
 const Search = () => {
   const route = useRoute();
   const { theCategory } = route.params;
-  console.log("idhar hey : " + theCategory);
 
   const navigation = useNavigation();
 
@@ -25,12 +23,11 @@ const Search = () => {
     navigation.navigate("DoctorDetails", { data: doctor });
   };
 
-  const [selectedCategory, setSelectedCategory] = useState(theCategory); // Updated initial state
+  const [selectedCategory, setSelectedCategory] = useState(theCategory);
   const [doctorData, setDoctorData] = useState([]);
-  //
+
   const [doctorName, setDoctorName] = useState("");
   const [error, setError] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
 
   const handleSearchSubmit = async () => {
     console.log("This is the doctor's Name:" + doctorName);
@@ -50,7 +47,7 @@ const Search = () => {
   const loadData = async () => {
     try {
       const category = selectedCategory === "All" ? "all" : selectedCategory;
-      console.log("Category being fetched:", category); // Log the category being fetched
+      console.log("Category being fetched:", category);
       const fetchData = await fetchDoctorsList(category);
       setDoctorData(fetchData.result);
       console.log("Doctor data: ", fetchData.result);
@@ -58,7 +55,6 @@ const Search = () => {
       setError(err.message);
       console.log(err);
       setDoctorData([]);
-      // console.log("Error: " + err);
     }
   };
 
@@ -116,6 +112,10 @@ const Search = () => {
       id: 6,
       category: "Dentist",
     },
+    {
+      id: 7,
+      category: "Anesthesiologist",
+    },
   ];
 
   const renderDoctorItem = ({ item }) => (
@@ -141,9 +141,6 @@ const Search = () => {
             {item.experience} years exp
           </Text>
         </View>
-        {/* <Text style={{ fontFamily: "Poppins-Regular" }}>
-          Rating: {item.rating}
-        </Text> */}
       </View>
       <View>
         <Text style={styles.doctorPrice}>$100{item.price}</Text>
@@ -157,7 +154,6 @@ const Search = () => {
         <Text style={styles.heading}>Doctors</Text>
       </View>
       <View style={styles.container} className="items-center">
-        {/* Lll? */}
         <View className="relative w-full flex-row items-center  ">
           <View className="left-8 bottom-2">
             <FontAwesomeIcon
@@ -191,7 +187,9 @@ const Search = () => {
             keyExtractor={(item) => item.doctorId.toString()}
             renderItem={renderDoctorItem}
           />
-          {doctorData.length === 0 && error && <Text> {error} </Text>}
+          {doctorData.length === 0 && error && (
+            <Text className="font-poppins"> {error} </Text>
+          )}
         </View>
       </View>
 

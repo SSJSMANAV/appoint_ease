@@ -7,6 +7,7 @@ import {
   faGreaterThan,
   faDoorOpen,
   faFileCirclePlus,
+  faBoxesPacking,
 } from "@fortawesome/free-solid-svg-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Footer from "../Home/Footer/Footer";
@@ -125,7 +126,24 @@ const Profile = () => {
             navigation.navigate("MyPackages");
           }}
         >
-          <Text> My Packages</Text>
+          <View className="justify-center flex-row items-center   ">
+            <View className="w-10/12">
+              <Text className="text-lg  font-semibold" style={styles.heading}>
+                My Packages
+              </Text>
+              <Text style={styles.text} className="text-slate-700">
+                See your bought medical packages
+              </Text>
+            </View>
+            <View>
+              <FontAwesomeIcon
+                icon={faBoxesPacking}
+                size={28}
+                color="#3b3d45"
+                className="text-lg "
+              />
+            </View>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={async () => {

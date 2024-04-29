@@ -13,7 +13,6 @@ const MyPackages = () => {
         },
       });
       const jsonData = await response.json();
-      console.log("dodo");
       console.log(jsonData);
       if (response.ok) {
         setPackages(jsonData.result);

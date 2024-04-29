@@ -197,9 +197,6 @@ const GreyMessageCard = ({ image, message, doctorId, patientId, userId }) => {
           <View
             style={{
               backgroundColor: "#ccc",
-              // borderRadius: 20,
-              // paddingHorizontal: 10,
-              // paddingVertical: 7,
               maxWidth: "70%",
             }}
           >

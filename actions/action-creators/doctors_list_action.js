@@ -38,9 +38,7 @@ export const fetchDoctorsByName = async (name, token) => {
     console.log(response.status);
     const jsonData = await response.json();
     if (response.status === 200) {
-      console.log("al;sdfsjdlfskjfsldk");
       console.log(jsonData);
-      console.log("al;sdfsjdlfskjfsldk");
       console.log(jsonData.result);
       return jsonData.result;
     } else {
@@ -77,7 +75,6 @@ export const fetchDoctorById = async (id) => {
 };
 
 export const fetchSchedules = async (date, token, doctorId) => {
-
   console.log("fetch Schedule");
   console.log(date);
   console.log(doctorId);

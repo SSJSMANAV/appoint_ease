@@ -15,6 +15,8 @@ import {
   faUser,
   faSmileWink,
   faHouse,
+  faPhoneFlip,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -182,7 +184,7 @@ const SignUp = () => {
                       />
                       <View className="left-28 " style={{ bottom: 28 }}>
                         <FontAwesomeIcon
-                          icon={faUser}
+                          icon={faPhoneFlip}
                           className="bg-blue-900 absolute "
                         />
                       </View>
@@ -199,7 +201,7 @@ const SignUp = () => {
                       />
                       <View className="left-28 " style={{ bottom: -12 }}>
                         <FontAwesomeIcon
-                          icon={faUser}
+                          icon={faEye}
                           className="bg-blue-900 relative "
                         />
                       </View>
@@ -230,17 +232,6 @@ const SignUp = () => {
           <Text className="font-light text-xs">
             By signing up, you agree to our Terms of Use and Privacy Policy.
           </Text>
-        </View>
-
-        <View className="items-center gap-y-3 mt-1">
-          <Text className="text-slate-600">-Or sign up with-</Text>
-
-          <TouchableOpacity>
-            <Image
-              className="w-8 h-8  "
-              source={require("../../images/google.png")}
-            />
-          </TouchableOpacity>
         </View>
       </View>
     </View>
